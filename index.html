@@ -1,0 +1,2178 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Taodek Farm</title>
+<base target="_top">
+<meta name="theme-color" content="#2F5D3A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Taodek Farm">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script src="config.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#EEF1EA; --paper:#FFFFFF; --brand:#2F5D3A; --brand2:#E3EDE0;
+  --text:#1C1F1A; --muted:#69736A; --line:#E0E5DC;
+  --red:#B42318; --redbg:#FDECEA; --amber:#8A5A00; --ambg:#FFF3D6; --green:#2E7D32; --grbg:#E6F4E7;
+  --f:"Sarabun","Leelawadee UI",system-ui,sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--f);font-size:16px;line-height:1.45}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+[hidden]{display:none!important}
+.num{font-variant-numeric:tabular-nums}
+.grow{flex:1;min-width:0}
+.meta{font-size:13.5px;color:var(--muted)}
+.red{color:var(--red)} .green{color:var(--green)} .amber{color:var(--amber)}
+
+/* ---------- header ---------- */
+.top{background:var(--brand);color:#fff;padding:calc(12px + env(safe-area-inset-top)) 16px 12px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:20}
+.top h1{margin:0;font-size:20px;font-weight:700;flex:1;min-width:0}
+.top .sync{font-size:12.5px;opacity:.85;background:none;border:0;color:#fff;padding:0}
+.top .gear{background:none;border:1.5px solid rgb(255 255 255 / .45);color:#fff;border-radius:8px;width:38px;height:38px;font-size:18px;line-height:1}
+.demo{background:var(--ambg);color:var(--amber);font-size:13.5px;padding:7px 16px}
+.wrap{max-width:760px;margin:0 auto;padding:12px 16px calc(150px + env(safe-area-inset-bottom))}
+
+/* ---------- building blocks ---------- */
+.card{background:var(--paper);border-radius:12px;padding:12px 14px;margin:0 0 12px;box-shadow:0 1px 2px rgb(0 0 0 / .05)}
+.card h3{margin:0 0 6px;font-size:15px}
+.list{background:var(--paper);border-radius:12px;overflow:hidden;box-shadow:0 1px 2px rgb(0 0 0 / .05)}
+.row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.tap{cursor:pointer}
+.row.tap:active{background:var(--brand2)}
+.id{font-weight:700;font-size:18px}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1.5px solid var(--line);background:var(--paper);border-radius:999px;padding:5px 12px;font-size:14px;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:#fff}
+.chip.warn{border-color:#F2C46D}
+.b{display:inline-block;font-size:12px;line-height:1.5;padding:0 7px;border-radius:999px;font-weight:600;vertical-align:1px;white-space:nowrap}
+.b.red{background:var(--redbg);color:var(--red)} .b.amb{background:var(--ambg);color:var(--amber)} .b.gr{background:var(--grbg);color:var(--green)} .b.grey{background:#EEF0EC;color:var(--muted)}
+.btn{border:0;border-radius:10px;padding:10px 16px;font-weight:600;background:var(--brand);color:#fff;white-space:nowrap}
+.btn.ghost{background:var(--brand2);color:var(--brand)}
+.btn.danger{background:var(--redbg);color:var(--red)}
+.btn:disabled{opacity:.55}
+.lnk{background:none;border:0;padding:2px 0;color:var(--brand);font-size:13.5px;font-weight:600}
+.seg{display:inline-flex;background:#EEF0EC;border-radius:9px;padding:3px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:none;border-radius:7px;padding:5px 11px;font-size:14px}
+.seg button[aria-pressed="true"]{background:var(--paper);font-weight:600;box-shadow:0 1px 2px rgb(0 0 0 / .12)}
+.bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 10px}
+.fld{width:100%;padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);font-size:16px}
+.fld.sm{padding:6px 10px;font-size:16px;margin-top:6px}
+.fl{display:block;margin:0 0 12px}
+.fl>span{display:block;font-size:13.5px;color:var(--muted);margin-bottom:4px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.hint{font-size:12.5px;color:var(--muted);margin-top:3px}
+.empty{padding:22px 14px;text-align:center;color:var(--muted)}
+
+/* ---------- weigh tab ---------- */
+.datebar{display:flex;align-items:center;gap:10px;margin:0 0 10px}
+.datebar input{width:auto;flex:1;max-width:220px}
+.notToday{color:var(--red);font-weight:700;font-size:13.5px}
+.alert .row{padding:8px 0;border-top:1px solid var(--line)}
+.alert .row:first-of-type{border-top:0}
+.win{width:104px;flex:none;text-align:right;padding:9px 10px;border:1.5px solid var(--line);border-radius:10px;font-size:18px;font-variant-numeric:tabular-nums;background:var(--paper)}
+.win.done{border-color:#9CCB9F;background:var(--grbg)}
+.win.chg{border-color:var(--brand)}
+.pv{font-size:13.5px;font-weight:600;min-height:0}
+.wbox{display:flex;align-items:center;gap:5px;flex:none}
+.wbox .u{font-size:14px;font-weight:600;color:var(--muted);width:20px}
+.wchk{display:flex;align-items:center;gap:6px;font-size:14px;margin-top:6px;color:var(--red);font-weight:600}
+.wchk input{width:18px;height:18px;accent-color:var(--red)}
+.card.watch{background:var(--redbg);font-size:14.5px}
+.savebar{position:fixed;left:0;right:0;bottom:calc(60px + env(safe-area-inset-bottom));z-index:25;background:var(--paper);border-top:1px solid var(--line);box-shadow:0 -4px 12px rgb(0 0 0 / .06)}
+.savebar>div{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:8px;padding:8px 16px}
+
+/* ---------- tabs ---------- */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;background:var(--paper);border-top:1px solid var(--line);padding:0 0 env(safe-area-inset-bottom)}
+.tab{flex:1;border:0;background:none;padding:8px 0 9px;font-size:12px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px}
+.tab svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tab[aria-current="page"]{color:var(--brand);font-weight:700}
+
+/* ---------- home ---------- */
+.hdate{font-size:13.5px;color:var(--muted);margin:-4px 0 10px}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 12px}
+.quick button{height:64px;border:0;border-radius:14px;background:var(--paper);box-shadow:0 1px 2px rgb(0 0 0 / .05);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:12.5px;font-weight:600;color:var(--text)}
+.quick button.main{background:var(--brand);color:#fff}
+.quick svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.quick button:not(.main) svg{stroke:var(--amber)}
+.card .row{padding:9px 0}
+.card .row:first-of-type{border-top:0}
+.ch{margin:0 0 4px;display:flex;align-items:center;justify-content:space-between}
+.ch h3{margin:0}
+.okb{min-width:36px;height:36px;padding:0 10px;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);color:var(--brand);font-weight:700;flex:none;font-size:13.5px}
+.okb:disabled{opacity:.35}
+.lrow{margin-bottom:8px}
+.zrow{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.lrow .zrow{margin-bottom:4px}
+.seg.cyc{display:flex;flex-wrap:nowrap}
+.seg.cyc button{flex:1;padding:4px 2px;font-size:12.5px;white-space:nowrap}
+.chip.add{border-style:dashed;color:var(--brand);font-weight:600}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 8px}
+.zrow .fld{flex:1;min-width:0}
+.zrow .meta{flex:none;width:64px;text-align:right;font-size:12.5px;line-height:1.25}
+.row .who{width:84px;flex:none}
+.row .who .id{font-size:17px;line-height:1.2}
+.goline{display:flex;align-items:center;gap:10px;background:var(--paper);border-radius:12px;padding:12px 14px;margin:0 0 12px;box-shadow:0 1px 2px rgb(0 0 0 / .05);cursor:pointer}
+
+/* ---------- weight rows ---------- */
+.wrow{background:var(--paper);border-radius:12px;padding:6px 10px;margin:0 0 6px;box-shadow:0 1px 2px rgb(0 0 0 / .05)}
+.wrow.done{background:#F6F7F3}
+.wrow.done .id,.wrow.done .win{color:var(--muted)}
+.wmain{display:flex;align-items:center;gap:8px}
+.wmain .who{width:96px;flex:none}
+.wmain .id{font-size:17px;line-height:1.2}
+.wmain .meta{font-size:12px;line-height:1.3}
+.wmain .win{flex:1;min-width:0;width:auto;height:44px;padding:0 10px;font-size:20px;font-weight:600}
+.ub{height:44px;min-width:44px;border:0;border-radius:10px;background:#EEF0EC;font-weight:600;font-size:15px;flex:none}
+span.ub{display:inline-flex;align-items:center;justify-content:center;font-size:13.5px;color:var(--muted)}
+.seg.wmode{margin-left:auto;flex:none}
+.flag{width:44px;height:44px;border:0;border-radius:10px;background:none;display:flex;align-items:center;justify-content:center;color:#A3A99F;flex:none}
+.flag.on{background:var(--ambg);color:var(--amber)}
+.flag svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.wmore{border-top:1px solid var(--line);margin-top:6px;padding-top:8px;display:flex;flex-direction:column;gap:8px}
+.syms{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.sym{height:40px;padding:0 16px;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);font-weight:600}
+.sym[aria-pressed="true"]{background:var(--amber);border-color:var(--amber);color:#fff}
+/* ---------- forms: ปุ่มติ๊กแทน dropdown ---------- */
+.chips.wrap{flex-wrap:wrap;overflow:visible;padding:2px 0 4px}
+.chip{min-height:38px}
+.fld{border-radius:12px;padding:11px 12px}
+.fld.big{font-size:26px;font-weight:600;height:58px;padding:0 14px;font-variant-numeric:tabular-nums}
+.fl>span{font-weight:600;color:var(--text)}
+.fl>span small{font-weight:400;color:var(--muted)}
+.dq{display:flex;gap:8px;align-items:center}
+.dq input{flex:1;min-width:0}
+.seg.wide{display:flex;margin:0 0 10px}
+.seg.wide button{flex:1;padding:7px 4px}
+table.h td.lo{color:var(--red);font-weight:700}
+table.h td.dim{color:#B5BAB2}
+
+/* ---------- eggs / groups ---------- */
+.stat.s3{grid-template-columns:repeat(3,1fr)}
+.stat.sub{background:var(--bg);border-radius:10px;padding:8px 6px;margin-top:8px}
+.stat.sub b{font-size:20px}
+.card.dim{background:#F6F7F3;color:var(--muted)}
+.card.dim h3{color:#4A4A44}
+.card h3.tap{cursor:pointer}
+.step{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px}
+.step>span{font-size:16px;font-weight:600}
+.step .dq{gap:4px}
+.step b{width:56px;text-align:center;font-size:26px}
+.stb{width:48px;height:48px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);font-size:24px;line-height:1}
+.stb.main{background:var(--brand);border-color:var(--brand);color:#fff}
+.stb.main.amb{background:var(--amber);border-color:var(--amber)}
+.quick.g4{margin:10px 0 0}
+.quick.g4 button{height:44px;font-size:13.5px;border:1.5px solid var(--line);box-shadow:none}
+.quick.g4 button.main{border-color:var(--brand)}
+.mline span{white-space:nowrap}
+.mline{display:flex;align-items:center;gap:10px;background:var(--paper);border-radius:12px;padding:9px 12px;margin:0 0 10px;box-shadow:0 1px 2px rgb(0 0 0 / .05);font-size:13.5px}
+.mline b{font-size:14.5px}
+.stn{width:64px;height:48px;text-align:center;font-size:24px;font-weight:700;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);color:var(--text)}
+.dpick{position:relative;flex:1;max-width:220px}
+.dpick .dlabel{display:flex;align-items:center;height:42px;padding:0 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--paper);font-size:15.5px;font-weight:600}
+.dpick input{position:absolute;inset:0;width:100%;height:100%;opacity:0;margin:0;cursor:pointer}
+.calc{font-size:13px;color:var(--muted);margin:-6px 0 10px}
+details.fold>summary{cursor:pointer;font-weight:700;font-size:15.5px;list-style:none}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::after{content:" ▸";color:var(--muted);font-weight:500}
+details.fold[open]>summary::after{content:" ▾"}
+
+/* ---------- modal ---------- */
+.modal{position:fixed;inset:0;z-index:50;background:rgb(20 30 20 / .38);display:flex;align-items:flex-end}
+.sheet{background:var(--paper);width:100%;max-width:640px;margin:0 auto;border-radius:16px 16px 0 0;max-height:92vh;overflow:auto;padding:14px 16px calc(18px + env(safe-area-inset-bottom))}
+@media (min-width:700px){.modal{align-items:center}.sheet{border-radius:16px}}
+.mh{display:flex;align-items:center;gap:10px;margin:0 0 10px}
+.mh h2{margin:0;font-size:20px;flex:1;min-width:0}
+.mh h2 small{font-size:14px;color:var(--muted);font-weight:500}
+.x{border:0;background:#EEF0EC;border-radius:8px;width:36px;height:36px;font-size:16px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.acts .btn{flex:1}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font-size:14.5px;margin:0 0 10px}
+.kv dt{color:var(--muted)} .kv dd{margin:0}
+.chart{width:100%;height:auto;display:block;margin:4px 0 8px}
+table.h{width:100%;border-collapse:collapse;font-size:14.5px}
+table.h th{font-size:12.5px;color:var(--muted);font-weight:600;text-align:right;padding:4px 6px;border-bottom:1.5px solid var(--line)}
+table.h td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+table.h th:first-child,table.h td:first-child{text-align:left}
+table.h tr.tap{cursor:pointer}
+table.h tr.note td{padding-top:0;color:var(--muted);font-size:13px;text-align:left}
+.stat{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center}
+.stat b{display:block;font-size:clamp(12px,4vw,20px);overflow-wrap:anywhere}
+.stat span{font-size:12.5px;color:var(--muted)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(130px + env(safe-area-inset-bottom));z-index:60;background:#1F2A20;color:#fff;padding:9px 16px;border-radius:10px;font-size:14.5px;max-width:calc(100% - 32px)}
+.pin{max-width:360px;margin:40px auto;padding:0 16px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="savebar" id="savebar" hidden></div>
+<nav class="tabs" id="tabs" hidden>
+  <button class="tab" data-act="tab" data-t="home"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a2 2 0 0 1-2 2h-4v-7H9v7H5a2 2 0 0 1-2-2z"/></svg>Home</button>
+  <button class="tab" data-act="tab" data-t="weigh"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v18M6 21h12M4 7h16M6 7l-3 7a3 3 0 0 0 6 0L6 7zM18 7l-3 7a3 3 0 0 0 6 0l-3-7z"/></svg>Weight</button>
+  <button class="tab" data-act="tab" data-t="turtles"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 14a8 6 0 0 1 16 0v3H4zM4 14h16M9 8.5L10 14M15 8.5L14 14M12 8v9M2 17h20"/></svg>Tortoise</button>
+  <button class="tab" data-act="tab" data-t="money"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="3"/></svg>Money</button>
+</nav>
+<div class="modal" id="modal" hidden></div>
+<div class="toast" id="toast" hidden></div>
+<script>
+/* ================= ค่าคงที่ + ตัวช่วย ================= */
+const GROUPS = ["ลูกเต่า", "ตัวกลาง", "พ่อแม่พันธุ์"];
+const SEXES = ["ผู้", "เมีย", "ไม่ทราบ"];
+const SOURCES = ["ฟักเอง", "ซื้อมา"];
+const ALIVE = "มีชีวิต", RESERVED = "จองแล้ว", SOLD = "ขายแล้ว", DEAD = "ตาย";
+// สายพันธุ์ = เฉพาะที่มีในฟาร์ม (ตรงกับ Code.gs) · พันธุ์อื่นกด ＋ New ในฟอร์ม
+const DEF = { species: ["Sulcata", "Albino Sulcata", "Leopard", "Indian Star", "Burmese Star", "Aldabra"], zones: ["บ้าน", "ฟาร์ม"] };
+// วันที่ในแอปเป็นอังกฤษ ปี พ.ศ. 2 หลัก เช่น 16 Nov 69 (Korn เลือก 2026-11-15)
+const EN_M = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+// ปุ่มอาการตอนชั่ง (Korn เลือก 2 ปุ่ม ที่เหลือพิมพ์เอง) · ติ๊กแล้ว = เข้า Watch บนหน้า Home อัตโนมัติ
+const SYMPTOMS = ["น้ำมูก", "ไม่กิน"];
+// น้ำหนักต่างจากรอบก่อนเกินนี้ = ถามให้เช็กตัวเลขก่อนบันทึก (กันพิมพ์ผิด เช่น กรัม/กิโล สลับกัน)
+const TYPO_PCT = 30;
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const num = v => { const x = parseFloat(String(v == null ? "" : v).replace(/,/g, "")); return isFinite(x) ? x : 0; };
+const clone = o => JSON.parse(JSON.stringify(o));
+const pad = n => String(n).padStart(2, "0");
+const iso = d => d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+const parseISO = s => { const [y, m, d] = String(s).split("-").map(Number); return new Date(y, m - 1, d); };
+const todayISO = () => iso(new Date());
+const daysBetween = (a, b) => Math.round((parseISO(b) - parseISO(a)) / 864e5);
+const cmpId = (a, b) => String(a).localeCompare(String(b), undefined, { numeric: true });
+function thDate(s) {
+  if (!s) return "";
+  const d = parseISO(s), y = d.getFullYear();
+  return d.getDate() + " " + EN_M[d.getMonth()] + (y !== new Date().getFullYear() ? " " + String(y + 543).slice(-2) : "");
+}
+const fullDate = s => s ? parseISO(s).getDate() + " " + EN_M[parseISO(s).getMonth()] + " " + String(parseISO(s).getFullYear() + 543).slice(-2) : "";
+// งานทำซ้ำ: รอบถัดไปนับจากวันที่ทำเสร็จจริง (Korn 2026-11-22) เช่น ถ่ายพยาธิช้าไป 2 สัปดาห์ ปีหน้าก็เลื่อนตาม
+const nextTaskDate = repeatDays => addDays(todayISO(), repeatDays);
+const ago = n => n === 0 ? "วันนี้" : n + " วันก่อน";
+function age(born) {
+  if (!born) return "";
+  const m = Math.floor(daysBetween(born, todayISO()) / 30.44);
+  if (m < 0) return "";
+  return m < 12 ? m + " เดือน" : Math.floor(m / 12) + " ปี" + (m % 12 ? " " + (m % 12) + " เดือน" : "");
+}
+// น้ำหนักเก็บเป็นกรัมเสมอ แสดงเป็น kg เมื่อถึง 1,000 g
+function fmtG(g) {
+  g = num(g);
+  const a = Math.abs(g);
+  return a >= 1000 ? (g / 1000).toLocaleString("en-US", { maximumFractionDigits: 2 }) + " kg" : (a >= 100 ? Math.round(g) : Math.round(g * 10) / 10) + " g";
+}
+const fmtDiff = g => (g > 0 ? "+" : g < 0 ? "−" : "±") + fmtG(Math.abs(g));
+const fmtPct = p => (p > 0 ? "+" : p < 0 ? "−" : "") + Math.abs(p).toFixed(Math.abs(p) < 10 ? 1 : 0) + "%";
+function toUnit(g, u) { return g === "" ? "" : u === "kg" ? String(+(num(g) / 1000).toFixed(3)) : String(g); }
+function fromUnit(t, u) { t = String(t).trim(); if (!t) return ""; const v = num(t); return v > 0 ? Math.round((u === "kg" ? v * 1000 : v) * 10) / 10 : ""; }
+const addDays = (s, n) => { const d = parseISO(s); d.setDate(d.getDate() + n); return iso(d); };
+
+const LS = { pin: "turtle-farm-pin", draft: "turtle-farm-draft", tab: "turtle-farm-tab" };
+function lsGet(k, dv) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : dv; } catch (e) { return dv; } }
+function lsSet(k, v) { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage blocked */ } }
+
+/* ================= state ================= */
+const S = {
+  mode: "demo", pin: "", needPin: false, loaded: false, err: "",
+  turtles: [], weights: [], clutches: [], lots: [], money: [], tasks: [], hatch: [], set: normSet({}), rev: 0, sheetUrl: "", syncedAt: 0,
+  tab: lsGet(LS.tab, "home"), turtleView: "turtles", unit: {},
+  wDate: todayISO(), zone: "ทั้งหมด", dueOnly: false, showYearly: false, draft: null, noteOpen: {}, wMode: "w",
+  q: "", sp: "ทั้งหมด", st: ALIVE, eggYear: String(new Date().getFullYear()),
+  form: null, busy: false,
+};
+
+function normSet(s) {
+  s = s || {};
+  const list = (v, d) => { const a = String(v == null ? "" : v).split(",").map(x => x.trim()).filter(Boolean); return a.length ? a : d; };
+  return {
+    species: list(s.species, DEF.species), zones: list(s.zones, DEF.zones),
+    // เตือนลด: ตามขนาดตัว ต่ำกว่า 100 g / 100 g–1 kg / 1 kg ขึ้นไป (ค่าตั้งต้นจากที่ Korn เล่า + ผมตั้งช่วงกลางเอง)
+    dropS: num(s.dropS) || 12, dropM: num(s.dropM) || 8, dropPct: num(s.dropPct) || 5,
+    staleKid: num(s.staleKid) || 10, staleBig: num(s.staleBig) || 21,
+    // รอบชั่งตามคอก { ชื่อคอก: วัน } · ไม่มี = Auto ตามกลุ่ม
+    zoneDays: (() => { try { const o = JSON.parse(String(s.zoneDays || "{}")); return o && typeof o === "object" ? o : {}; } catch (e) { return {}; } })(),
+    // เตือนไข่: วางล่าสุดครบกี่วันให้เช็กรัง · ก่อนถึงวันวางแรกของปีก่อนกี่วันให้เตือนฤดูไข่ (ตั้งเองจากที่ Korn เล่า 3-5 สัปดาห์)
+    eggGap: num(s.eggGap) || 21, eggAhead: num(s.eggAhead) || 14,
+    // เรียงตามที่ใช้บ่อย (Korn 2026-11-15: ค่าแรง ผัก ค่าส่งผัก อาหาร คือรายจ่ายหลัก) · แก้ได้ใน ⚙
+    moneyCats: list(s.moneyCats, ["ค่าแรงประจำ", "ผัก", "ค่าส่งผัก", "อาหารเม็ด", "ค่าแรงจิปาถะ", "ค่าหมอ/ยา", "ค่าไฟ", "ค่าบำรุงคอก", "ค่าส่งเต่า", "อื่นๆ"]),
+  };
+}
+
+/* ================= คำนวณ ================= */
+let IDX = null;
+function idx() {
+  if (IDX) return IDX;
+  // log = ทุกแถว (รวมบันทึกอาการที่ไม่ได้ชั่ง) · hist = เฉพาะแถวที่มีน้ำหนัก
+  const log = {}, hist = {}, byId = {};
+  S.weights.slice().sort((x, y) => x.d < y.d ? -1 : x.d > y.d ? 1 : 0).forEach(w => {
+    (log[w.id] || (log[w.id] = [])).push(w);
+    if (w.g > 0) (hist[w.id] || (hist[w.id] = [])).push(w);
+  });
+  S.turtles.forEach(t => { byId[t.id] = t; });
+  return (IDX = { log, hist, byId });
+}
+const changed = () => { IDX = null; };
+const hist = id => idx().hist[id] || [];
+const logOf = id => idx().log[id] || [];
+const savedOn = (id, d) => logOf(id).find(w => w.d === d);
+
+// หน่วยของแต่ละแถว: เคยชั่งแล้ว ≥ 1 kg ใช้ kg · ยังไม่เคยชั่ง ลูกเต่าใช้ g ตัวอื่นใช้ kg
+function unitOf(t) {
+  if (S.unit[t.id] === "g" || S.unit[t.id] === "kg") return S.unit[t.id];
+  if (t.unit === "g" || t.unit === "kg") return t.unit;
+  const h = hist(t.id), l = h[h.length - 1];
+  return l ? (l.g >= 10000 ? "kg" : "g") : (t.grp === "ลูกเต่า" ? "g" : "kg");
+}
+
+// เกิน 400 kg = พิมพ์ผิดแน่ สำหรับสายพันธุ์ในฟาร์มนี้
+const MAX_G = 400000;
+/** น้ำหนักกลางๆ ของตัวอื่นที่สายพันธุ์+กลุ่มเดียวกัน (ใช้ค่าที่กำลังพิมพ์ในวันนั้นด้วย ช่วงเริ่มใช้ที่ทุกตัวยังไม่เคยชั่ง) */
+function peerMedian(t) {
+  const D = S.draft && S.draft.date === S.wDate ? S.draft : null;
+  const v = alive().filter(x => x.id !== t.id && x.sp === t.sp && x.grp === t.grp).map(x => {
+    if (D && num(D.v[x.id]) > 0) return num(D.v[x.id]);
+    const h = hist(x.id); return h.length ? h[h.length - 1].g : 0;
+  }).filter(Boolean).sort((a, b) => a - b);
+  return v.length ? v[Math.floor(v.length / 2)] : 0;
+}
+/** ตัวเลขน่าสงสัยว่าพิมพ์ผิด: ต่างจากรอบก่อนมาก หรือชั่งครั้งแรกแต่ต่างจากตัวอื่นในกลุ่มมาก */
+function oddness(t, g, d) {
+  if (!(g > 0)) return "";
+  if (g > MAX_G) return "เกิน 400 kg";
+  const b = info(t.id, d).last;
+  if (b) { const p = (g - b.g) / b.g * 100; return Math.abs(p) > TYPO_PCT ? `ต่างจากรอบก่อน ${fmtPct(p)}` : ""; }
+  const m = peerMedian(t);
+  if (m && (g > m * 3 || g < m / 3)) return `ต่างจาก ${t.sp} ${t.grp} ตัวอื่นมาก (ทั่วไป ~${fmtG(m)})`;
+  return "";
+}
+/** เกณฑ์ลดตามขนาดตัว (Korn 2026-11-22: ตัวเกิน 1 kg ไม่ควรลดเกิน 5-10% · ตัวต่ำกว่า 100 g ฉี่/ถ่ายทีเดียว 60 → 55 g ได้) */
+const dropThr = g => g < 100 ? S.set.dropS : g < 1000 ? S.set.dropM : S.set.dropPct;
+/** ลดจากน้ำหนักสูงสุดใน 30 วันก่อนหน้าเกินเกณฑ์ (รอบเดียว) · ไม่ได้ชั่งเกิน 30 วัน เทียบกับครั้งล่าสุด */
+function dropOf(h, g, d) {
+  const before = h.filter(w => w.d < d), from = addDays(d, -30);
+  let prior = before.filter(w => w.d >= from);
+  if (!prior.length) prior = before.slice(-1);
+  if (!prior.length) return null;
+  const max = Math.max(...prior.map(w => w.g)), pct = (g - max) / max * 100;
+  return pct <= -dropThr(max) ? { pct, max } : null;
+}
+/** ลดต่อเนื่อง = รอบนี้และรอบก่อนต่ำกว่าเกณฑ์ทั้งคู่ (รอบเดียวอาจแค่เพิ่งฉี่/ถ่าย ยังไม่เตือน) */
+function dropTwice(h, g, d) {
+  const before = h.filter(w => w.d < d), prev = before[before.length - 1];
+  const now = dropOf(h, g, d);
+  return now && prev && dropOf(before, prev.g, prev.d) ? now : null;
+}
+
+/** สถิติของเต่า 1 ตัว: ล่าสุด รอบก่อน เปลี่ยนเท่าไร โตต่อ 30 วัน (before = นับเฉพาะก่อนวันนั้น) */
+function info(id, before) {
+  let h = hist(id);
+  if (before) h = h.filter(w => w.d < before);
+  const n = h.length, o = { h, last: h[n - 1], prev: h[n - 2] };
+  if (o.last && o.prev) {
+    o.diff = o.last.g - o.prev.g; o.pct = o.diff / o.prev.g * 100;
+    const dd = daysBetween(o.prev.d, o.last.d); o.per30 = dd > 0 ? o.diff / dd * 30 : null;
+  }
+  if (o.last) o.since = daysBetween(o.last.d, todayISO());
+  return o;
+}
+/** รอบชั่ง (วัน): ตั้งรายตัว yearly > ตั้งตามคอก (⚙) > Auto ตามกลุ่ม (ลูกเต่า staleKid · ตัวอื่น staleBig) */
+function cycleOf(t) {
+  if (t.weighMode === "yearly") return 365;
+  return num(S.set.zoneDays[t.zone]) || (t.grp === "ลูกเต่า" ? S.set.staleKid : S.set.staleBig);
+}
+// รอบปีละครั้ง = ไม่ขึ้นหน้า Weight ปกติ (กด "ตัวใหญ่ ▸") · เตือนบรรทัด Yearly บน Home
+const isYearly = t => cycleOf(t) >= 365;
+/** ป้ายเตือน: watch = กดเฝ้าดูไว้ · drop = ลดต่อเนื่อง 2 รอบ · noGrow = ลูกเต่าไม่โต 3 รอบติด · due = ถึงรอบชั่ง */
+function flags(t) {
+  const f = {};
+  if (t.status !== ALIVE) return f;
+  if (t.watch) f.watch = daysBetween(t.watch, todayISO());
+  const o = info(t.id), h = o.h, n = h.length;
+  const dr = o.last && dropTwice(h, o.last.g, o.last.d);
+  if (dr) { f.drop = dr.pct; f.dropMax = dr.max; }
+  if (t.grp === "ลูกเต่า" && n >= 4 && h[n - 1].g <= h[n - 2].g && h[n - 2].g <= h[n - 3].g && h[n - 3].g <= h[n - 4].g) f.noGrow = true;
+  if (!o.last || o.since > cycleOf(t)) f.due = o.last ? o.since : -1;
+  return f;
+}
+/** เตือนไข่บน Home: แม่ที่วางล่าสุดครบ eggGap วัน (ยังอยู่ในฤดู ≤ 3 เท่า) = เช็กรัง · แม่ที่ใกล้วันวางแรกของปีก่อน = ฤดูไข่ */
+function eggAlerts() {
+  const today = todayISO(), y = Number(today.slice(0, 4)), out = [];
+  alive().filter(t => t.sex === "เมีย").forEach(t => {
+    const cs = S.clutches.filter(c => c.mom === t.id && c.laid).sort((a, b) => a.laid < b.laid ? -1 : 1);
+    if (!cs.length) return;
+    const last = cs[cs.length - 1], since = daysBetween(last.laid, today);
+    if (logOf(t.id).some(w => String(w.note || "").indexOf(NEST_NOTE) >= 0 && w.d > last.laid && daysBetween(w.d, today) < NEST_HIDE)) return;
+    if (since >= S.set.eggGap && since <= S.set.eggGap * 3) { out.push({ t, kind: "due", since, last }); return; }
+    if (since <= S.set.eggGap * 3) return;
+    const prev = cs.filter(c => Number(c.laid.slice(0, 4)) === y - 1);
+    if (!prev.length) return;
+    const dd = daysBetween(today, y + "-" + prev[0].laid.slice(5));
+    if (dd >= -7 && dd <= S.set.eggAhead) out.push({ t, kind: "season", dd, first: prev[0].laid });
+  });
+  return out.sort((a, b) => (a.kind === b.kind ? 0 : a.kind === "due" ? -1 : 1) || cmpId(a.t.id, b.t.id));
+}
+function flagBadges(f, withDue) {
+  return (f.watch !== undefined ? `<span class="b red">เฝ้าดู ${f.watch} วัน</span> ` : "")
+    + (f.drop !== undefined ? `<span class="b red">ลด ${fmtPct(f.drop)} · 2 รอบ</span> ` : "")
+    + (f.noGrow ? `<span class="b red">ไม่โต 3 รอบ</span> ` : "")
+    + (withDue && f.due !== undefined ? `<span class="b amb">${f.due < 0 ? "ยังไม่เคยชั่ง" : "ไม่ได้ชั่ง " + f.due + " วัน"}</span>` : "");
+}
+const alive = () => S.turtles.filter(t => t.status === ALIVE);
+function statusBadge(t) {
+  return t.status === RESERVED ? `<span class="b amb">จองแล้ว</span>` : t.status === SOLD ? `<span class="b grey">ขายแล้ว</span>` : t.status === DEAD ? `<span class="b grey">ตาย</span>` : "";
+}
+
+/* ================= หลังบ้าน (Google Sheet / โหมดตัวอย่าง) ================= */
+const API_URL = String(window.TURTLE_API || "").trim();
+const errText = e => String((e && e.message) || e || "error");
+const isPinErr = e => /PIN_INVALID/.test(errText(e));
+function api(fn, ...args) {
+  if (S.mode === "demo") return Promise.resolve().then(() => demoApi(fn, ...args));
+  if (S.mode === "api") {
+    // ส่งเป็น text/plain เพื่อไม่ให้ติด CORS preflight ของ Apps Script · เกิน 30 วิ = ถือว่าเชื่อมต่อไม่ได้
+    const ctl = typeof AbortController === "function" ? new AbortController() : null, tm = ctl && setTimeout(() => ctl.abort(), 30000);
+    return fetch(API_URL, { method: "POST", body: JSON.stringify({ fn, pin: S.pin, args }), signal: ctl ? ctl.signal : undefined })
+      .then(r => { if (!r.ok) throw new Error("เชื่อมต่อหลังบ้านไม่ได้ (HTTP " + r.status + ")"); return r.json(); })
+      .then(j => { if (!j.ok) throw new Error(j.error || "เกิดข้อผิดพลาด"); return j.result; })
+      .catch(e => { throw (e && e.name === "AbortError") ? new Error("เน็ตช้าเกินไป ลองใหม่อีกครั้ง") : e; })
+      .finally(() => clearTimeout(tm));
+  }
+  return new Promise((resolve, reject) => {
+    google.script.run.withSuccessHandler(resolve).withFailureHandler(reject)[fn](S.pin, ...args);
+  });
+}
+
+// แก้ข้อมูลในเครื่องให้ตรงกับที่หลังบ้านบันทึก (ไม่ต้องโหลดใหม่ทั้งชุดหลังบันทึก)
+const local = {
+  weights(date, entries) {
+    entries.forEach(e => {
+      S.weights = S.weights.filter(w => !(w.d === date && w.id === e.id));
+      if (num(e.g) > 0 || e.note || num(e.inch) > 0) S.weights.push({ d: date, id: e.id, g: num(e.g) > 0 ? num(e.g) : "", note: e.note || "", inch: num(e.inch) || "" });
+    });
+    changed();
+  },
+  turtles(list) {
+    list.forEach(t => { const i = S.turtles.findIndex(x => x.id === t.id); if (i >= 0) S.turtles[i] = clone(t); else S.turtles.push(clone(t)); });
+    changed();
+  },
+  // ลบเต่า = ลบแถวน้ำหนัก/อาการของตัวนั้นด้วย · รายการเงินอยู่ต่อ แค่ตัดรหัสออก (ตรงกับ apiDeleteTurtle)
+  delTurtle(id) {
+    S.turtles = S.turtles.filter(t => t.id !== id);
+    S.weights = S.weights.filter(w => w.id !== id);
+    S.money.forEach(m => {
+      const linked = String(m.turtleId || "").split(",").map(x => x.trim()).filter(Boolean);
+      if (linked.indexOf(id) < 0) return;
+      m.turtleId = linked.filter(x => x !== id).join(",");
+      if (/^(ขายเต่า|ซื้อเต่า)/.test(m.category)) m.note = [m.note, `เต่า ${id} (ลบจากทะเบียนแล้ว)`].filter(Boolean).join(" · ");
+    });
+    dropDraft(id); changed();
+  },
+  // เปลี่ยนรหัส = ประวัติน้ำหนัก แม่/พ่อในชุดไข่ และรหัสที่ผูกในรายการเงิน ย้ายตาม (ตรงกับ apiRenameTurtle)
+  renameTurtle(from, to) {
+    const t = S.turtles.find(x => x.id === from); if (t) t.id = to;
+    S.weights.forEach(w => { if (w.id === from) w.id = to; });
+    S.clutches.forEach(c => { if (c.mom === from) c.mom = to; if (c.dad === from) c.dad = to; });
+    S.money.forEach(m => { if (m.turtleId) m.turtleId = String(m.turtleId).split(",").map(x => x.trim() === from ? to : x.trim()).join(","); });
+    dropDraft(from); changed();
+  },
+  clutch(c) { const i = S.clutches.findIndex(x => x.id === c.id); if (i >= 0) S.clutches[i] = clone(c); else S.clutches.push(clone(c)); },
+  delClutch(id) { S.clutches = S.clutches.filter(c => c.id !== id); },
+  lot(lot) { const i = S.lots.findIndex(x => x.id === lot.id); if (i >= 0) S.lots[i] = clone(lot); else S.lots.push(clone(lot)); },
+  delLot(id) { S.lots = S.lots.filter(x => x.id !== id); },
+  hatch(h) { S.hatch.push(clone(h)); },
+  money(item) { S.money.push(clone(item)); },
+  moneyUpd(item) { const i = S.money.findIndex(x => x.id === item.id); if (i >= 0) S.money[i] = Object.assign(clone(S.money[i]), clone(item)); },
+  delMoney(id) { S.money = S.money.filter(x => x.id !== id); },
+  task(task) { const i = S.tasks.findIndex(x => x.id === task.id); if (i >= 0) S.tasks[i] = clone(task); else S.tasks.push(clone(task)); },
+  delTask(id) { S.tasks = S.tasks.filter(x => x.id !== id); },
+  // เปลี่ยนชื่อคอก/สายพันธุ์/หมวด ในข้อมูลเก่า (ตรงกับ apiSaveSettings ที่ส่ง renames)
+  renameValues(renames) {
+    Object.keys(renames || {}).forEach(kind => {
+      const map = {}; renames[kind].forEach(([a, b]) => { map[a] = b; });
+      RN_FIELDS[kind].forEach(([list, key]) => S[list].forEach(x => { if (Object.prototype.hasOwnProperty.call(map, x[key])) x[key] = map[x[key]]; }));
+    });
+    changed();
+  },
+};
+function nextClutchId() {
+  const max = S.clutches.reduce((m, c) => Math.max(m, Number(String(c.id).replace(/\D/g, "")) || 0), 0);
+  return "C" + String(max + 1).padStart(3, "0");
+}
+let DEMO = null;
+function demoApi(fn, ...a) {
+  if (fn === "apiLoad") return clone(DEMO);
+  if (fn === "apiRev") return S.rev;
+  const out = { rev: ++S.rev };
+  if (fn === "apiSaveLot") { const lot = clone(a[0]); lot.id = lot.id || "L" + String(S.lots.length + 1).padStart(4, "0"); return Object.assign(out, { id: lot.id }); }
+  if (fn === "apiRecordLotDeath") return out;
+  if (fn === "apiHatch") {
+    const h = a[0], c = S.clutches.find(x => x.id === h.clutch), total = num(h.n) + num(h.split);
+    if (!c) throw new Error("ไม่พบชุดไข่ " + h.clutch);
+    if (num(c.hatched) + total > num(c.eggs)) throw new Error(`ออกรวม ${num(c.hatched) + total} ตัว มากกว่าจำนวนไข่ ${c.eggs} ฟอง`);
+    let lot = h.lot;
+    if (!lot || !S.lots.some(l => l.id === lot)) {
+      const next = S.lots.reduce((m, l) => { const g = String(l.id).match(/^G(\d+)$/); return g ? Math.max(m, Number(g[1])) : m; }, 0) + 1;
+      lot = "G" + String(next).padStart(3, "0");
+    }
+    return Object.assign(out, { lot });
+  }
+  if (fn === "apiSplitLot") {
+    const lot = S.lots.find(x => x.id === a[0]);
+    if (!lot || lotAvail(lot) < 1) throw new Error("กลุ่มนี้ไม่มีตัวเหลือให้แยกแล้ว");
+    if (a[2] && lotDefectLeft(lot) < 1) throw new Error("กลุ่มนี้ไม่มีเบิ้ลเหลือแล้ว");
+    if (idx().byId[a[1].id]) throw new Error("รหัสนี้มีอยู่แล้ว");
+    return out;
+  }
+  if (fn === "apiDeleteLot") return out;
+  if (fn === "apiUpdateMoney" || fn === "apiDeleteMoney") {
+    const id = fn === "apiUpdateMoney" ? a[0].id : a[0], x = S.money.find(m => m.id === id);
+    if (!x) throw new Error("ไม่พบรายการ " + id);
+    if (/^(deposit|balance)$/.test(x.saleStatus)) throw new Error("รายการมัดจำ ให้แก้ในชีต");
+    return out;
+  }
+  if (fn === "apiUndoHatch") {
+    const hs = S.hatch.filter(h => h.clutch === a[0]), h = hs[hs.length - 1];
+    if (!h) throw new Error("ชุดนี้ยังไม่มีบันทึก + Hatched");
+    const lot = lotById(h.lot);
+    if (lot && lotAvail(lot) < num(h.n) + num(h.split)) throw new Error("กลุ่มเหลือไม่พอให้หักคืน");
+    return out;
+  }
+  if (fn === "apiSaveMoney") return Object.assign(out, { id: "M" + String(S.money.length + 1).padStart(5, "0") });
+  if (fn === "apiSaveMoneyBatch") return { rev: out.rev, items: a[0].filter(x => num(x.amount) > 0).map((x, i) => ({ id: "M" + String(S.money.length + i + 1).padStart(5, "0") })) };
+  if (fn === "apiSaveTask") { const task = clone(a[0]); task.id = task.id || "T" + String(S.tasks.length + 1).padStart(5, "0"); return Object.assign(out, { id: task.id }); }
+  if (fn === "apiRecordSale") {
+    const item = a[0];
+    if (item.turtleId && (!idx().byId[item.turtleId] || idx().byId[item.turtleId].status !== ALIVE)) throw new Error("เต่าตัวนี้ไม่ได้อยู่ในสถานะมีชีวิต");
+    return Object.assign(out, { id: "M" + String(S.money.length + 1).padStart(5, "0") });
+  }
+  if (fn === "apiBuyTurtle") {
+    if (idx().byId[a[1].id]) throw new Error("รหัสนี้มีอยู่แล้ว");
+    return Object.assign(out, { id: "M" + String(S.money.length + 1).padStart(5, "0") });
+  }
+  if (fn === "apiCompleteTask") {
+    const task = S.tasks.find(x => x.id === a[0]);
+    if (!task) throw new Error("ไม่พบงานนี้");
+    return out;
+  }
+  if (fn === "apiDeleteTask") return out;
+  if (fn === "apiCompleteSale") { if (!S.money.some(x => x.id === a[0])) throw new Error("ไม่พบรายการจอง"); return out; }
+  if (fn === "apiSaveTurtles" && a[1]) {
+    const dup = a[0].map(t => t.id).filter(id => idx().byId[id]);
+    if (dup.length) throw new Error("รหัสนี้มีอยู่แล้ว: " + dup.join(", "));
+  }
+  if (fn === "apiRenameTurtle") {
+    if (!idx().byId[a[0]]) throw new Error("ไม่พบรหัสเต่า " + a[0]);
+    if (a[0] !== a[1] && idx().byId[a[1]]) throw new Error("รหัสนี้มีอยู่แล้ว: " + a[1]);
+  }
+  if (fn === "apiSaveClutch") out.id = a[0].id || nextClutchId();
+  return out;
+}
+
+async function load() {
+  S.err = "";
+  try {
+    const d = await api("apiLoad");
+    S.turtles = d.turtles || []; S.weights = d.weights || []; S.clutches = d.clutches || [];
+    S.lots = d.lots || []; S.money = d.money || []; S.tasks = d.tasks || []; S.hatch = d.hatch || [];
+    S.set = normSet(d.settings); S.rev = d.rev; S.sheetUrl = d.sheetUrl || ""; S.syncedAt = Date.now();
+    S.loaded = true; S.needPin = false; changed();
+  } catch (e) {
+    if (isPinErr(e)) { S.needPin = true; } else S.err = errText(e);
+  }
+  render();
+}
+// กลับมาเปิดแอป: ถ้าข้อมูลในชีตเปลี่ยน (แก้จากเครื่องอื่น/แก้ในชีตเอง) โหลดใหม่
+async function checkRev() {
+  if (S.mode === "demo" || !S.loaded || !$("#modal").hidden) return;
+  try { const r = await api("apiRev"); if (r !== S.rev) await load(); else { S.syncedAt = Date.now(); setSyncText(); } } catch (e) { /* เงียบไว้ ลองใหม่รอบหน้า */ }
+}
+async function save(fn, args, after, msg) {
+  if (S.busy) return false;
+  S.busy = true; setBusy(true);
+  try {
+    const r = await api(fn, ...args);
+    if (r && r.rev) S.rev = r.rev;
+    after && after(r);
+    S.syncedAt = Date.now();
+    if (msg) toast(msg);
+    return r || true;
+  } catch (e) {
+    if (isPinErr(e)) { S.needPin = true; closeModal(); render(); return false; }
+    alert("บันทึกไม่สำเร็จ: " + errText(e));
+    return false;
+  } finally { S.busy = false; setBusy(false); }
+}
+function setBusy(on) { document.querySelectorAll("[data-busy]").forEach(b => { b.disabled = on; if (on) { b.dataset.t = b.textContent; b.textContent = "กำลังบันทึก…"; } else if (b.dataset.t) b.textContent = b.dataset.t; }); }
+
+/* ================= หน้าจอหลัก ================= */
+function render() {
+  const app = $("#app");
+  $("#tabs").hidden = !S.loaded || S.needPin;
+  if (S.needPin) { app.innerHTML = pinView(); updateSaveBar(); return; }
+  if (!S.loaded) {
+    app.innerHTML = `<div class="top"><h1>Taodek Farm</h1></div><div class="wrap">${S.err
+      ? `<div class="card"><b>โหลดข้อมูลไม่ได้</b><div class="meta">${esc(S.err)}</div><div class="acts"><button class="btn" data-act="reload">ลองใหม่</button></div></div>`
+      : `<div class="empty">กำลังโหลด…</div>`}</div>`;
+    return;
+  }
+  if (!/^(home|weigh|turtles|money)$/.test(S.tab)) S.tab = "home";
+  const title = { home: "Taodek Farm", weigh: "Weight", turtles: "Tortoise", money: "Money" }[S.tab];
+  app.innerHTML = `<div class="top"><h1>${title}</h1>${S.mode === "demo" ? "" : `<button class="sync" data-act="reload" id="sync"></button>`}<button class="gear" data-act="settings" aria-label="Settings">⚙</button></div>`
+    + (S.mode === "demo" ? `<div class="demo">โหมดตัวอย่าง · ข้อมูลสมมติ ไม่บันทึกจริง</div>` : "")
+    + `<main class="wrap">${S.tab === "home" ? rHome() : S.tab === "weigh" ? rWeigh() : S.tab === "turtles" ? (S.turtleView === "eggs" ? rEggs() : S.turtleView === "lots" ? rLots() : S.turtleView === "weights" ? rWeights() : rTurtles()) : rMoney()}</main>`;
+  document.querySelectorAll(".tab").forEach(b => b.setAttribute("aria-current", b.dataset.t === S.tab ? "page" : "false"));
+  setSyncText(); updateSaveBar();
+}
+function setSyncText() {
+  const el = $("#sync"); if (!el || !S.syncedAt) return;
+  const d = new Date(S.syncedAt); el.textContent = "อัปเดต " + pad(d.getHours()) + ":" + pad(d.getMinutes());
+}
+function pinView() {
+  return `<div class="top"><h1>Taodek Farm</h1></div><div class="pin card"><b>ใส่รหัสเข้าแอป</b><div class="meta">รหัสเดียวกับ APP_PIN ใน Code.gs ใส่ครั้งเดียว เครื่องจะจำไว้</div>
+    <input class="fld" id="pinInput" type="password" autocomplete="off" autocapitalize="off" style="margin-top:10px" aria-label="รหัสเข้าแอป">
+    ${S.pinTried && S.pin ? `<div class="meta red" style="margin-top:6px">รหัสไม่ถูก ลองใหม่</div>` : ""}
+    <div class="acts"><button class="btn" data-act="pinGo">เข้าแอป</button></div></div>`;
+}
+
+/* ---------- แท็บ Weight ---------- */
+// คอกที่ไม่อยู่ในตั้งค่าแล้วแต่ยังมีเต่าอยู่ ยังต้องมีปุ่มให้กด ไม่งั้นเต่าหลุดไปอยู่แค่ใน "All"
+function zoneChips() {
+  const zones = S.set.zones.filter(z => alive().some(t => t.zone === z))
+    .concat([...new Set(alive().map(t => t.zone))].filter(z => z && S.set.zones.indexOf(z) < 0), ["ทั้งหมด"]);
+  return `<div class="chips">${zones.map(z => `<button class="chip" data-act="zone" data-z="${esc(z)}" aria-pressed="${S.zone === z}">${z === "ทั้งหมด" ? "All" : esc(z)}</button>`).join("")}</div>`;
+}
+const inZone = t => S.zone === "ทั้งหมด" || t.zone === S.zone;
+function weighList() {
+  let a = alive().filter(inZone);
+  if (!S.showYearly) a = a.filter(t => !isYearly(t));
+  return a.sort((x, y) => cmpId(x.id, y.id));
+}
+function rWeigh() {
+  const list = weighList(), notToday = S.wDate !== todayISO();
+  const yearly = alive().filter(t => inZone(t) && isYearly(t)).length;
+  const done = list.filter(t => { const s = savedOn(t.id, S.wDate); return s && s.g; }).length;
+  const prevDate = list.map(t => { const o = info(t.id, S.wDate); return o.last ? o.last.d : ""; }).filter(Boolean).sort().pop();
+  const zoneTxt = S.zone === "ทั้งหมด" ? "All" : esc(S.zone);
+  // ช่องวันที่ของเครื่องโชว์คนละแบบ → โชว์ "Mon 17 Nov 69" เอง ทับด้วยช่องเลือกวันแบบโปร่งใส
+  return `<div class="datebar"><label class="dpick"><span class="dlabel">${DOW[parseISO(S.wDate).getDay()]} ${fullDate(S.wDate)} ▾</span><input type="date" id="wDate" value="${S.wDate}" max="${todayISO()}" aria-label="วันที่ชั่ง"></label>${notToday ? `<span class="notToday">ไม่ใช่วันนี้</span>` : ""}`
+    // สลับช่องทุกแถวเป็นน้ำหนัก หรือขนาดนิ้ว (วัดนิ้วไม่ต้องเปิดธงทีละตัว)
+    + `<div class="seg wmode" role="group"><button type="button" data-act="wMode" data-v="w" aria-pressed="${S.wMode !== "inch"}">Weight</button><button type="button" data-act="wMode" data-v="inch" aria-pressed="${S.wMode === "inch"}">Inch</button></div></div>`
+    + zoneChips()
+    + `<div class="bar"><span class="meta grow">${zoneTxt} · ${list.length} ตัว · ชั่งแล้ว <b>${done}</b>${prevDate ? ` · ครั้งก่อน ${thDate(prevDate)}` : ""}</span>${yearly ? `<button class="lnk" data-act="yearly">ตัวใหญ่ ${yearly} ${S.showYearly ? "▾" : "▸"}</button>` : ""}</div>`
+    + (list.length ? list.map(weighRow).join("") : `<div class="empty">${S.turtles.length ? "ไม่มีเต่าในคอกนี้" : "ยังไม่มีเต่าในทะเบียน ไปที่แท็บ Tortoise → All → ＋"}</div>`);
+}
+function ensureDraft() { if (!S.draft) S.draft = { date: S.wDate, v: {}, n: {}, w: {}, s: {}, i: {} }; S.draft.s = S.draft.s || {}; S.draft.i = S.draft.i || {}; S.draft.w = S.draft.w || {}; return S.draft; }
+function draftG(id) { const s = savedOn(id, S.wDate); return S.draft && id in S.draft.v ? S.draft.v[id] : (s ? s.g : ""); }
+// โน้ตในชีตเก็บเป็นข้อความเดียว "น้ำมูก · ไม่กิน · ราขึ้น" · ในหน้าจอแยกเป็นปุ่มอาการ + ช่องพิมพ์
+function splitNote(note) {
+  const parts = String(note || "").split(" · ").map(x => x.trim()).filter(Boolean);
+  return { sym: SYMPTOMS.filter(x => parts.indexOf(x) >= 0), text: parts.filter(p => SYMPTOMS.indexOf(p) < 0).join(" · ") };
+}
+const joinNote = (sym, text) => sym.concat(String(text || "").trim() ? [String(text).trim()] : []).join(" · ");
+function draftSym(id) {
+  const s = savedOn(id, S.wDate), base = splitNote(s ? s.note : "");
+  return { sym: S.draft && S.draft.s && id in S.draft.s ? S.draft.s[id] : base.sym, text: S.draft && id in S.draft.n ? S.draft.n[id] : base.text };
+}
+function draftNote(id) { const d = draftSym(id); return joinNote(d.sym, d.text); }
+const FLAG_SVG = `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 21V4h11l-1.5 4L16 12H5"/></svg>`;
+function weighRow(t) {
+  const s = savedOn(t.id, S.wDate), base = info(t.id, S.wDate), g = draftG(t.id), u = unitOf(t), d = draftSym(t.id);
+  const inch = S.draft && S.draft.i && t.id in S.draft.i ? S.draft.i[t.id] : (s ? s.inch || "" : "");
+  const inchMode = S.wMode === "inch";
+  const isChg = inchMode ? String(inch) !== String(s ? s.inch || "" : "") : S.draft && t.id in S.draft.v && String(S.draft.v[t.id]) !== String(s ? s.g : "");
+  const done = (inchMode ? !!(s && s.inch) : !!(s && s.g)) && !isChg, open = !!S.noteOpen[t.id], hasNote = d.sym.length || d.text || t.watch;
+  const lastInch = inchMode ? logOf(t.id).filter(w => w.inch && w.d < S.wDate).pop() : null;
+  // มีตัวเลขของวันนี้แล้ว = บรรทัดผลด้านล่างบอก "ลด" อยู่แล้ว ไม่ต้องขึ้นป้ายซ้ำ
+  let badges = flagBadges(flags(t)).replace(/<span class="b red">เฝ้าดู[^<]*<\/span> ?/, "");
+  if (g !== "") badges = badges.replace(/<span class="b red">ลด[^<]*<\/span> ?/, "");
+  const f = flags(t);
+  return `<div class="wrow${done ? " done" : ""}"><div class="wmain">
+      <div class="who tap" data-act="turtle" data-id="${esc(t.id)}"><div class="id">${esc(t.id)}</div><div class="meta">${esc(t.sp)}${base.last ? ` · ${fmtG(base.last.g)}` : " · ยังไม่เคยชั่ง"}</div></div>
+      ${inchMode
+        ? `<input class="win${isChg ? " chg" : ""}" data-i="${esc(t.id)}" inputmode="decimal" enterkeyhint="next" autocomplete="off" value="${esc(inch)}" placeholder="—" aria-label="ขนาดนิ้ว ${esc(t.id)}"><span class="ub">นิ้ว</span>`
+        : `<input class="win${isChg ? " chg" : ""}" data-w="${esc(t.id)}" data-u="${u}" inputmode="decimal" enterkeyhint="next" autocomplete="off" value="${esc(toUnit(g, u))}" placeholder="—" aria-label="น้ำหนัก ${esc(t.id)} (${u})">
+      <button class="ub" data-act="unit" data-id="${esc(t.id)}" aria-label="เปลี่ยนหน่วย">${u}</button>`}
+      <button class="flag${hasNote ? " on" : ""}" data-act="note" data-id="${esc(t.id)}" aria-expanded="${open}" aria-label="อาการ ${esc(t.id)}">${FLAG_SVG}</button>
+    </div>
+    ${badges.trim() ? `<div style="margin-top:4px">${badges}</div>` : ""}
+    <div class="pv" data-pv="${esc(t.id)}">${inchMode ? (lastInch ? `<span class="meta">ครั้งก่อน ${esc(lastInch.inch)}" (${thDate(lastInch.d)})</span>` : "") : preview(t, g)}</div>
+    ${open ? `<div class="wmore">
+      <div class="syms">${SYMPTOMS.map(x => `<button type="button" class="sym" data-act="sym" data-id="${esc(t.id)}" data-v="${esc(x)}" aria-pressed="${d.sym.indexOf(x) >= 0}">${esc(x)}</button>`).join("")}
+        ${t.watch ? `<span class="b red">Watch ${f.watch} วัน</span>` : ""}</div>
+      <input class="fld sm" style="margin:0" data-n="${esc(t.id)}" value="${esc(d.text)}" placeholder="โน้ตอื่น เช่น ราขึ้นกระดอง" aria-label="โน้ต ${esc(t.id)}">
+    </div>` : ""}
+  </div>`;
+}
+/** ผลทันทีที่พิมพ์: ต่างจากครั้งก่อนเท่าไร (สีเทา ขึ้นลงนิดหน่อยเป็นเรื่องปกติ)
+ *  แดงเฉพาะลดต่อเนื่อง 2 รอบ · ส้ม = น่าจะพิมพ์ผิด */
+function preview(t, g) {
+  if (g === "") return "";
+  const odd = oddness(t, g, S.wDate), b = info(t.id, S.wDate).last;
+  const warn = odd ? ` <span class="b amb">เช็กตัวเลข: ${esc(odd)}</span>` : "";
+  if (!b) return `<span class="${odd ? "amber" : "meta"}">ครั้งแรก · ${fmtG(g)}</span>${warn}`;
+  const diff = g - b.g, pct = diff / b.g * 100, dr = dropTwice(hist(t.id), g, S.wDate);
+  const drop = dr && !odd ? ` <span class="b red">ลดต่อเนื่อง 2 รอบ ${fmtPct(dr.pct)}</span>` : "";
+  return `<span class="${odd ? "amber" : "meta"}">${fmtDiff(diff)} (${fmtPct(pct)}) จาก ${thDate(b.d)}</span>${drop}${warn}`;
+}
+/** รายการที่ยังไม่บันทึก: น้ำหนักหรือโน้ตเปลี่ยน (น้ำหนักว่างแต่มีโน้ต = บันทึกอาการ) */
+function pending() {
+  const D = S.draft; if (!D) return [];
+  const ids = [...new Set(Object.keys(D.v).concat(Object.keys(D.n), Object.keys(D.s || {}), Object.keys(D.i || {})))];
+  return ids.map(id => {
+    const s = savedOn(id, D.date), sg = s ? s.g : "", sn = s ? s.note : "";
+    const g = id in D.v ? D.v[id] : sg, note = draftNote(id);
+    const inch = id in (D.i || {}) ? D.i[id] : (s ? s.inch : "");
+    return { id, g, note, inch, s, chg: String(g) !== String(sg) || note !== sn || String(inch) !== String(s ? s.inch || "" : "") };
+  }).filter(x => idx().byId[x.id] && x.chg);
+}
+const watchPending = () => S.draft && S.draft.w ? Object.keys(S.draft.w).filter(id => S.draft.w[id] && idx().byId[id] && !idx().byId[id].watch) : [];
+function updateSaveBar() {
+  const bar = $("#savebar"), n = S.loaded && S.tab === "weigh" && !S.needPin ? new Set(pending().map(x => x.id).concat(watchPending())).size : 0;
+  bar.hidden = !n;
+  if (n) bar.innerHTML = `<div><span class="grow meta">ยังไม่บันทึก ${n} ตัว</span><button class="btn ghost" data-act="wClear">Clear</button><button class="btn" data-act="wSave" data-busy>Save ${n}</button></div>`;
+}
+/** ทิ้งตัวเลข/โน้ตที่ยังไม่บันทึกของรหัสนี้ (ใช้ตอนลบหรือเปลี่ยนรหัสเต่า) */
+function dropDraft(id) {
+  if (!S.draft) return;
+  ["v", "n", "i", "w", "s"].forEach(k => { if (S.draft[k]) delete S.draft[k][id]; });
+  lsSet(LS.draft, S.mode === "demo" ? null : S.draft);
+}
+let draftT = null;
+function touchDraft() {
+  clearTimeout(draftT);
+  draftT = setTimeout(() => lsSet(LS.draft, S.mode === "demo" ? null : S.draft), 300);
+  updateSaveBar();
+}
+function onWeightInput(el) {
+  const id = el.dataset.w, g = fromUnit(el.value, el.dataset.u);
+  ensureDraft().v[id] = g;
+  const s = savedOn(id, S.wDate);
+  el.classList.toggle("chg", String(g) !== String(s ? s.g : ""));
+  el.classList.toggle("done", !!s && !!s.g && String(g) === String(s.g));
+  const pv = document.querySelector(`[data-pv="${CSS.escape(id)}"]`), t = idx().byId[id];
+  if (pv && t) pv.innerHTML = preview(t, g);
+  touchDraft();
+}
+function onInchInput(el) {
+  const id = el.dataset.i, s = savedOn(id, S.wDate);
+  ensureDraft().i[id] = el.value.trim();
+  el.classList.toggle("chg", el.value.trim() !== String(s ? s.inch || "" : ""));
+  touchDraft();
+}
+async function saveWeights() {
+  const list = pending(), watch = watchPending(), date = S.draft.date;
+  if (!list.length && !watch.length) return;
+  const odd = list.map(x => ({ x, r: oddness(idx().byId[x.id], x.g, date) })).filter(y => y.r);
+  if (odd.length && !confirm("ตัวเลขน่าจะพิมพ์ผิด\n\n" + odd.map(({ x, r }) => `${x.id}: ${fmtG(x.g)} — ${r}`).join("\n") + "\n\nบันทึกตามนี้ไหม (กดยกเลิก = กลับไปแก้)")) return;
+  const del = list.filter(x => x.g === "" && x.s && x.s.g !== "").length;
+  if (del && !confirm(`จะลบน้ำหนักของวันที่ ${thDate(date)} ออก ${del} ตัว (ช่องที่ลบตัวเลขออก) ตกลงไหม`)) return;
+  const entries = list.map(x => ({ id: x.id, g: x.g, note: x.note }));
+  entries.forEach(e => { e.inch = list.find(x => x.id === e.id).inch; });
+  if (entries.length && !(await save("apiSaveWeights", [date, entries], () => local.weights(date, entries)))) return;
+  // ติ๊กอาการ = เริ่ม Watch ตัวนั้น · ตัวที่ Watch อยู่แล้วและมีโน้ตใหม่ = อัปเดตอาการที่โชว์บน Home
+  const changedTurtles = new Map();
+  list.forEach(x => { const t = clone(idx().byId[x.id]); t.unit = S.unit[x.id] || unitOf(t); if (t.watch && x.note) t.wNote = x.note; changedTurtles.set(t.id, t); });
+  watch.forEach(id => { const t = changedTurtles.get(id) || clone(idx().byId[id]); t.watch = date; t.wNote = draftNote(id); changedTurtles.set(id, t); });
+  const turtleUpdates = [...changedTurtles.values()];
+  if (turtleUpdates.length && !(await save("apiSaveTurtles", [turtleUpdates, false], () => local.turtles(turtleUpdates)))) return;
+  toast(`บันทึกแล้ว ${new Set(entries.map(e => e.id).concat(watch)).size} ตัว`);
+  S.draft = null; S.noteOpen = {}; lsSet(LS.draft, null); render();
+}
+
+/* ---------- แท็บ เต่า ---------- */
+function turtleFilter(withSp) {
+  let a = S.turtles;
+  if (S.st !== "ทั้งหมด") a = a.filter(t => t.status === S.st);
+  if (withSp && S.sp !== "ทั้งหมด") a = a.filter(t => t.sp === S.sp);
+  const q = S.q.trim().toLowerCase();
+  if (q) a = a.filter(t => t.id.toLowerCase().includes(q) || String(t.note || "").toLowerCase().includes(q));
+  return a;
+}
+function rTurtles() {
+  const base = turtleFilter(false), cnt = {};
+  base.forEach(t => { cnt[t.sp] = (cnt[t.sp] || 0) + 1; });
+  const sps = S.set.species.filter(s => cnt[s]).concat(Object.keys(cnt).filter(s => S.set.species.indexOf(s) < 0));
+  return tortoiseSeg()
+    + `<div class="bar"><input class="fld grow" id="q" type="search" value="${esc(S.q)}" placeholder="ค้นหารหัส" inputmode="search" aria-label="ค้นหารหัส"><button class="btn" data-act="tAdd">＋ Add</button></div>`
+    // "จองแล้ว" ซ่อนไว้ (ไม่ใช้มัดจำแล้ว) ยกเว้นยังมีเต่าสถานะนั้นค้างในชีต
+    + `<div class="chips">${[ALIVE].concat(S.turtles.some(t => t.status === RESERVED) ? [RESERVED] : [], [SOLD, DEAD, "ทั้งหมด"]).map(s => `<button class="chip" data-act="st" data-v="${s}" aria-pressed="${S.st === s}">${s}</button>`).join("")}</div>`
+    + `<div class="chips"><button class="chip" data-act="sp" data-v="ทั้งหมด" aria-pressed="${S.sp === "ทั้งหมด"}">ทุกสายพันธุ์ ${base.length}</button>${sps.map(s => `<button class="chip" data-act="sp" data-v="${esc(s)}" aria-pressed="${S.sp === s}">${esc(s)} ${cnt[s]}</button>`).join("")}</div>`
+    + `<div class="list" id="tlist">${tList()}</div>`;
+}
+function tList() {
+  const a = turtleFilter(true).sort((x, y) => cmpId(x.id, y.id));
+  if (!a.length) return `<div class="empty">${S.turtles.length ? "ไม่พบ" : "ยังไม่มีเต่า กด ＋ เพิ่มเต่า (ใส่ทีละหลายตัวได้)"}</div>`;
+  return a.map(t => {
+    const o = info(t.id);
+    return `<div class="row tap" data-act="turtle" data-id="${esc(t.id)}"><div class="grow"><span class="id">${esc(t.id)}</span> <span class="meta">${esc(t.sp)}</span> ${statusBadge(t)} ${flagBadges(flags(t))}
+      <div class="meta">${[t.sex !== "ไม่ทราบ" ? t.sex : "", t.grp, t.zone].filter(Boolean).map(esc).join(" · ")}</div></div>
+      <div class="num" style="text-align:right">${o.last ? fmtG(o.last.g) : ""}<div class="meta">${o.last ? ago(o.since) : ""}</div></div></div>`;
+  }).join("");
+}
+
+/* ---------- Tortoise › Eggs ---------- */
+// สถานะชุดไข่: ปิดแล้ว / กำลังออก (มีตัวออกแล้ว) / ยังไม่เช็กเชื้อ / ฟักอยู่ (เช็กเชื้อแล้ว)
+function clutchState(c) { return c.closed ? "closed" : num(c.hatched) > 0 ? "hatching" : c.fertile === "" ? "unchecked" : "incubating"; }
+const hatchLotsOf = cid => [...new Set(S.hatch.filter(h => h.clutch === cid && h.lot).map(h => h.lot))];
+const lotName = l => l.name || `${l.sp} ${l.zone}`;
+// เบิ้ลคงเหลือในกลุ่ม = เข้า − ตาย − ให้รหัส − ขาย
+const lotDefectLeft = l => Math.max(0, num(l.defect) - num(l.deadDefect) - num(l.splitDefect) - lotSoldDefect(l.id));
+function eggClutches() {
+  const all = S.eggYear === "all";
+  return S.clutches.filter(c => all || String(c.laid).startsWith(S.eggYear)).sort((a, b) => a.laid < b.laid ? 1 : -1);
+}
+/** % มีเชื้อ นับเฉพาะชุดที่เช็กแล้ว · % ฟักออก นับเฉพาะชุดที่ปิดแล้ว · % เบิ้ล จากตัวที่ออกทั้งหมด */
+function eggStats(cs) {
+  const sum = (arr, k) => arr.reduce((s, c) => s + num(c[k]), 0);
+  const checked = cs.filter(c => c.fertile !== ""), done = cs.filter(c => c.closed);
+  const eggs = sum(cs, "eggs"), hatched = sum(cs, "hatched"), split = sum(cs, "split");
+  const fe = sum(checked, "eggs"), de = sum(done, "eggs");
+  return { n: cs.length, eggs, hatched, split, moms: new Set(cs.map(c => c.mom)).size,
+    fertPct: fe ? Math.round(sum(checked, "fertile") / fe * 100) : null, hatchPct: de ? Math.round(sum(done, "hatched") / de * 100) : null, splitPct: hatched ? Math.round(split / hatched * 100) : null,
+    doneN: done.length };
+}
+const yy = y => String(Number(y) + 543).slice(-2);
+const pct = v => v == null ? "–" : v + "%";
+function rEggs() {
+  const years = [...new Set(S.clutches.map(c => String(c.laid).slice(0, 4)).filter(Boolean).concat([String(new Date().getFullYear())]))].sort().reverse();
+  const cs = eggClutches(), s = eggStats(cs);
+  const open = cs.filter(c => !c.closed), closed = cs.filter(c => c.closed);
+  return tortoiseSeg()
+    + `<div class="bar"><div class="chips grow" style="padding:0">${years.map(y => `<button class="chip" data-act="eggYear" data-v="${y}" aria-pressed="${S.eggYear === y}">${yy(y)}</button>`).join("")}<button class="chip" data-act="eggYear" data-v="all" aria-pressed="${S.eggYear === "all"}">All years</button></div><button class="btn" data-act="cAdd">＋ Clutch</button></div>`
+    // ออกแล้ว = นับทุกชุด · % ฟัก = เฉพาะชุดที่ปิดแล้ว (ชุดที่ยังออกอยู่ยังไม่จบ) แยกช่องกันไม่ให้อ่านปน
+    + `<div class="card"><div class="stat s3"><div><b>${s.n}</b><span>Clutches · ${s.moms} แม่</span></div><div><b>${s.eggs}</b><span>Eggs</span></div><div><b>${pct(s.fertPct)}</b><span>Fertile %</span></div><div><b>${s.hatched}</b><span>Hatched</span></div><div><b>${pct(s.hatchPct)}</b><span>Hatch % · ${s.doneN} ชุดที่ปิด</span></div><div><b class="${s.split ? "amber" : ""}">${s.split}</b><span>เบิ้ล · ${pct(s.splitPct)}</span></div></div>
+       <div class="bar" style="margin:8px 0 0"><span class="meta grow">Fertile % นับชุดที่เช็กแล้ว</span><button class="lnk" data-act="byMother">By mother ▸</button></div></div>`
+    + (cs.length ? open.concat(closed).map(clutchCard).join("") : `<div class="empty">ยังไม่มีชุดไข่${S.eggYear === "all" ? "" : "ปีนี้"} · กด ＋ Clutch เมื่อเจอไข่</div>`);
+}
+function clutchCard(c) {
+  const t = idx().byId[c.mom], st = clutchState(c), days = daysBetween(c.laid, todayISO()), lots = hatchLotsOf(c.id);
+  const pill = st === "closed" ? `<span class="b grey">Closed ${thDate(c.closed)}</span>` : st === "hatching" ? `<span class="b gr">Hatching</span>`
+    : st === "unchecked" ? `<span class="b amb">Not checked · ${days} วัน</span>` : `<span class="b gr">Incubating · ${days} วัน</span>`;
+  const stats = c.fertile !== "" || num(c.hatched) > 0
+    ? `<div class="stat s3 sub"><div><b>${c.fertile === "" ? "–" : c.fertile}</b><span>มีเชื้อ${c.fertD ? ` · ${thDate(c.fertD)}` : ""}</span></div><div><b>${num(c.hatched)}</b><span>ออกแล้ว${c.hatchLast ? ` · ${thDate(c.hatchLast)}` : ""}</span></div><div><b class="${num(c.split) ? "amber" : ""}">${num(c.split)}</b><span>เบิ้ล</span></div></div>` : "";
+  const grp = lots.length ? `<div class="meta" style="margin-top:6px">→ กลุ่ม ${lots.map(id => { const l = S.lots.find(x => x.id === id); return `<button class="lnk" data-act="lotOpen" data-id="${esc(id)}">${esc(l ? lotName(l) : id)}</button>`; }).join(", ")}</div>` : "";
+  const acts = st === "closed" ? `<div style="margin-top:6px"><button class="lnk" data-act="cReopen" data-id="${esc(c.id)}" data-busy>เปิดชุดนี้ใหม่</button></div>` : `<div class="acts" style="margin-top:10px"><button class="btn" data-act="hatch" data-id="${esc(c.id)}">+ Hatched</button><button class="btn ghost" data-act="cFert" data-id="${esc(c.id)}">${c.fertile === "" ? "Check fertile" : "เช็กเชื้ออีกครั้ง"}</button><button class="btn ghost" style="flex:0 0 auto" data-act="cClose" data-id="${esc(c.id)}" data-busy>Close</button></div>`;
+  return `<div class="card${st === "closed" ? " dim" : ""}"><div class="ch"><h3 class="tap" data-act="cOpen" data-id="${esc(c.id)}">${esc(c.id)} · ${esc(t ? t.sp : "")}</h3>${pill}</div>
+    <div class="meta tap" data-act="cOpen" data-id="${esc(c.id)}">แม่ ${esc(c.mom)}${c.dad ? ` · พ่อ ${esc(c.dad)}` : ""} · วาง ${thDate(c.laid)} · ${c.eggs} ฟอง${c.note ? ` · ${esc(c.note)}` : ""}</div>${stats}${grp}${acts}</div>`;
+}
+function openByMother() {
+  const cs = eggClutches(), moms = {};
+  cs.forEach(c => (moms[c.mom] || (moms[c.mom] = [])).push(c));
+  const ids = Object.keys(moms).sort(cmpId);
+  openModal(head("By mother", S.eggYear === "all" ? "ทุกปี" : "ปี " + yy(S.eggYear))
+    + (ids.length ? `<table class="h"><tr><th>แม่</th><th>ชุด</th><th>ฟอง</th><th>มีเชื้อ</th><th>ออก</th><th>เบิ้ล</th></tr>${ids.map(id => {
+      const s = eggStats(moms[id]), t = idx().byId[id];
+      return `<tr class="tap" data-act="turtle" data-id="${esc(id)}"><td><b>${esc(id)}</b> <span class="meta">${esc(t ? t.sp : "")}</span></td><td>${s.n}</td><td>${s.eggs}</td><td>${pct(s.fertPct)}</td><td>${s.hatched}</td><td>${s.split}</td></tr>`;
+    }).join("")}</table><div class="hint">แม่ที่ไข่ไม่มีเชื้อหลายปีจะเห็นจากคอลัมน์มีเชื้อ · แตะแถวดูประวัติแม่</div>` : `<div class="empty">ยังไม่มีชุดไข่</div>`)
+    + `<div class="acts"><button class="btn ghost" data-act="close">ปิด</button></div>`);
+}
+
+/* ---------- หน้าแรก / ล็อต / เงิน / Todo ---------- */
+const baht = n => num(n).toLocaleString("th-TH", { maximumFractionDigits: 2 }) + " บาท";
+function monthMoney(date) {
+  const month = String(date || todayISO()).slice(0, 7);
+  return S.money.filter(x => String(x.date).startsWith(month));
+}
+function previousMonthKey(date) {
+  const d = parseISO(date);
+  d.setDate(1); d.setMonth(d.getMonth() - 1);
+  return iso(d).slice(0, 7);
+}
+function previousCategoryTotal(category) {
+  const month = previousMonthKey(todayISO());
+  return S.money.filter(x => x.direction === "จ่าย" && x.category === category && String(x.date).startsWith(month))
+    .reduce((n, x) => n + num(x.amount), 0);
+}
+function turtleFinance(id) {
+  const includes = x => String(x.turtleId || "").split(",").map(s => s.trim()).includes(id);
+  const purchase = S.money.filter(x => x.direction === "จ่าย" && x.category === "ซื้อเต่า" && includes(x)).reduce((n, x) => n + num(x.amount), 0);
+  const sale = S.money.filter(x => x.direction === "รับ" && x.category === "ขายเต่า" && x.saleStatus === "paid" && includes(x)).reduce((n, x) => n + num(x.total), 0);
+  const expenses = S.money.filter(x => x.direction === "จ่าย" && x.category !== "ซื้อเต่า" && includes(x));
+  const costs = expenses.reduce((n, x) => n + num(x.amount) / String(x.turtleId).split(",").filter(Boolean).length, 0);
+  return { purchase, sale, costs, rows: expenses };
+}
+function incomingTotal(list) { return list.filter(x => x.direction === "รับ").reduce((n, x) => n + num(x.amount), 0); }
+function outgoingTotal(list) { return list.filter(x => x.direction === "จ่าย").reduce((n, x) => n + num(x.amount), 0); }
+function lotSold(id) {
+  return S.money.filter(x => x.lotId === id && x.direction === "รับ" && x.saleStatus === "paid")
+    .reduce((n, x) => n + num(x.quantity), 0);
+}
+function lotReserved(id) {
+  return S.money.filter(x => x.lotId === id && x.direction === "รับ" && x.saleStatus === "deposit")
+    .reduce((n, x) => n + num(x.quantity), 0);
+}
+function lotRemaining(lot) {
+  return Math.max(0, num(lot.start) - num(lot.dead) - num(lot.split) - lotSold(lot.id));
+}
+const lotSoldDefect = id => S.money.filter(x => x.lotId === id && x.direction === "รับ" && /^(paid|deposit)$/.test(x.saleStatus)).reduce((n, x) => n + num(x.defectQty), 0);
+const lotAvail = l => lotRemaining(l) - lotReserved(l.id);
+const lotById = id => S.lots.find(l => l.id === id);
+const repLabel = n => { if (!num(n)) return ""; const r = REPEATS.find(x => x[0] === num(n)); return r ? r[1] : num(n) === 7 ? "Weekly" : `Every ${num(n)} days`; };
+/** กำหนดเสร็จของงาน: เลยมา / วันนี้ / อีก N วัน */
+function dueText(d) {
+  const n = daysBetween(todayISO(), d);
+  return n < 0 ? `<span class="red">เลยมา ${-n} วัน</span>` : n === 0 ? "ภายในวันนี้" : `ภายใน ${fullDate(d)} · อีก ${n} วัน`;
+}
+const taskRow = t => `<div class="row"><button class="okb" data-act="taskDone" data-id="${esc(t.id)}" aria-label="เสร็จแล้ว">✓</button><div class="grow tap" data-act="taskEdit" data-id="${esc(t.id)}"><b>${esc(t.title)}</b><div class="meta">${dueText(t.dueDate)}${t.repeatDays ? ` · ${repLabel(t.repeatDays)}` : ""}${t.note ? ` · ${esc(t.note)}` : ""}</div></div>${CHEV}</div>`;
+// เช็กรังแล้วไม่เจอไข่ = ซ่อนเตือนไข่ของแม่ตัวนั้น 7 วัน (เก็บเป็นแถวโน้ตในแท็บน้ำหนัก ย้อนดูได้)
+const NEST_NOTE = "เช็กรัง ไม่เจอไข่", NEST_HIDE = 7;
+const CHEV = `<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A3A99F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>`;
+const ICON = {
+  food: `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 9h18l-1.5 11h-15zM8 9V6a4 4 0 0 1 8 0v3"/></svg>`,
+  labor: `<svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>`,
+  expense: `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>`,
+  sell: `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20 7H4l2 13h12zM9 7V5a3 3 0 0 1 6 0v2"/></svg>`,
+  income: `<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>`,
+};
+/** รายการ Watch บน Home: เตือนไข่ (อัตโนมัติ) + ตัวที่ Korn ติ๊กอาการ/กดเฝ้าดูเอง (กด Done เพื่อเอาออก) */
+function watchRows() {
+  // แตะแถวเตือนไข่ = ลงชุดไข่ใหม่ของแม่ตัวนั้นเลย · ปุ่ม "ไม่เจอ" = เช็กรังแล้วไม่มีไข่ ซ่อน 7 วัน
+  const eggs = eggAlerts().map(e => `<div class="row"><div class="who tap" data-act="eggFound" data-id="${esc(e.t.id)}"><span class="id">${esc(e.t.id)}</span><div class="meta">${esc(e.t.sp)} ♀</div></div><div class="grow tap" data-act="eggFound" data-id="${esc(e.t.id)}">${e.kind === "due"
+      ? `<span class="b amb">Eggs due</span><div class="meta">วางล่าสุด ${thDate(e.last.laid)} · ${e.since} วัน · แตะเมื่อเจอไข่</div>`
+      : `<span class="b gr">Egg season</span><div class="meta">ปีก่อนวาง ${thDate(e.first)} · ${e.dd > 0 ? `อีก ${e.dd} วัน` : e.dd === 0 ? "วันนี้" : `เลยมา ${-e.dd} วัน`}</div>`}</div><button class="okb" data-act="noEggs" data-id="${esc(e.t.id)}" aria-label="เช็กรังแล้วไม่เจอไข่">ไม่เจอ</button></div>`);
+  const manual = alive().filter(t => t.watch).sort((a, b) => a.watch < b.watch ? 1 : -1).map(t => {
+    const f = flags(t);
+    return `<div class="row"><div class="who tap" data-act="turtle" data-id="${esc(t.id)}"><span class="id">${esc(t.id)}</span><div class="meta">${esc(t.sp)}</div></div><div class="grow tap" data-act="turtle" data-id="${esc(t.id)}"><span class="b red">${esc(t.wNote || "Watch")}</span><div class="meta">${esc(t.zone)} · ${f.watch} วัน</div></div><button class="okb" data-act="unwatch" data-id="${esc(t.id)}" data-home="1">Done</button></div>`;
+  });
+  return eggs.concat(manual);
+}
+function rHome() {
+  const today = todayISO(), d = new Date();
+  const mm = monthMoney(today), income = incomingTotal(mm), expense = outgoingTotal(mm);
+  const al = alive().map(t => ({ t, f: flags(t) }));
+  const drops = al.filter(x => x.f.drop !== undefined).length, noGrow = al.filter(x => x.f.noGrow).length;
+  const dueZ = {};
+  al.filter(x => x.f.due !== undefined && !isYearly(x.t)).forEach(x => { const z = dueZ[x.t.zone] || (dueZ[x.t.zone] = { n: 0, max: 0 }); z.n++; z.max = Math.max(z.max, x.f.due); });
+  const zones = Object.keys(dueZ).sort((a, b) => dueZ[b].n - dueZ[a].n);
+  // Korn ไม่ได้เปิดแอปทุกวัน → โชว์งานที่เลยกำหนด + ต้องเสร็จภายใน 7 วัน
+  const tasks = S.tasks.filter(t => !t.done && t.dueDate <= addDays(today, TASK_AHEAD)).sort((a, b) => String(a.dueDate).localeCompare(String(b.dueDate)));
+  const rows = watchRows(), cap = 4, more = S.watchAll ? 0 : Math.max(0, rows.length - cap);
+  // ตัวใหญ่ชั่งปีละครั้งที่เลยปีแล้ว: บรรทัดเล็กใน Watch (ไม่ขึ้นหน้า Weight ปกติ)
+  const yearly = al.filter(x => isYearly(x.t) && x.f.due !== undefined);
+  const dropZone = (al.find(x => x.f.drop !== undefined) || al.find(x => x.f.noGrow) || { t: {} }).t.zone || "";
+  const net = income - expense;
+  return `<div class="hdate">${DOW[d.getDay()]} ${fullDate(today)}</div>`
+    // เงินเดือนนี้ขึ้นบนสุด (Korn เปิดแอปอยากเห็น Todo · แม่ใกล้ไข่ · กำไร/ขาดทุนเดือนนี้ ในจอเดียว)
+    + `<div class="mline tap" data-act="tab" data-t="money"><span class="meta">${EN_M[d.getMonth()]} ฿</span><span>In <b>${num(income).toLocaleString("en-US")}</b></span><span>Out <b>${num(expense).toLocaleString("en-US")}</b></span><span class="grow" style="text-align:right">Net <b class="${net < 0 ? "red" : "green"}">${net < 0 ? "−" : ""}${Math.abs(net).toLocaleString("en-US")}</b></span>${CHEV}</div>`
+    + `<div class="quick"><button data-act="moneyOpen" data-kind="expense" data-cat="ผัก">${ICON.food}Food</button><button data-act="moneyOpen" data-kind="expense" data-cat="ค่าแรงประจำ">${ICON.labor}Labor</button><button data-act="moneyOpen" data-kind="expense">${ICON.expense}Expense</button><button class="main" data-act="moneyOpen" data-kind="sale">${ICON.sell}Sell</button></div>`
+    + `<div class="card"><div class="ch"><h3>Tasks</h3><button class="lnk" data-act="tasksOpen">All ▸</button></div>${tasks.length ? tasks.map(taskRow).join("") : `<div class="meta" style="padding:6px 0">ไม่มีงานที่ต้องเสร็จใน ${TASK_AHEAD} วันนี้</div>`}<div class="row"><button class="lnk" data-act="taskAdd">＋ Add task</button></div></div>`
+    + `<div class="card"><div class="ch"><h3>Watch</h3><button class="lnk" data-act="watchEdit">Edit</button></div>${rows.length ? rows.slice(0, more ? cap : rows.length).join("") : `<div class="meta" style="padding:6px 0">ไม่มีอะไรต้องดู</div>`}`
+    + (more ? `<div class="row tap" data-act="watchAll"><span class="grow meta">อีก ${more} ตัว</span><span class="lnk">ดูทั้งหมด ▸</span></div>` : "")
+    + (drops || noGrow ? `<div class="row tap" data-act="goWeights" data-z="${esc(dropZone)}"><span class="grow meta">Weight · ${drops ? `ลด ${drops}` : ""}${drops && noGrow ? " · " : ""}${noGrow ? `ไม่โต ${noGrow}` : ""}</span><span class="lnk">ดู ▸</span></div>` : "")
+    + (yearly.length ? `<div class="row tap" data-act="goYearly" data-z="${esc(yearly[0].t.zone)}"><span class="grow meta">Yearly · ตัวใหญ่ถึงรอบชั่ง ${yearly.length} ตัว (${yearly.slice(0, 3).map(x => esc(x.t.id)).join(", ")}${yearly.length > 3 ? "…" : ""})</span><span class="lnk">ชั่ง ▸</span></div>` : "") + `</div>`
+    + (zones.length ? `<div class="goline" data-act="goZoneWeigh" data-z="${esc(zones[0])}"><div class="grow"><b>Weigh ${esc(zones[0])}</b><div class="meta">${dueZ[zones[0]].n} ตัว · ${dueZ[zones[0]].max < 0 ? "ยังไม่เคยชั่ง" : `ไม่ได้ชั่ง ${dueZ[zones[0]].max} วัน`}${zones.length > 1 ? ` · อีก ${zones.slice(1).map(z => `${esc(z)} ${dueZ[z].n}`).join(", ")}` : ""}</div></div><span class="btn">Go</span></div>` : "");
+}
+const TV = [["eggs", "Eggs"], ["lots", "Groups"], ["weights", "Weights"], ["turtles", "All"]];
+function tortoiseSeg() {
+  return `<div class="seg wide" role="group">${TV.map(([v, l]) => `<button type="button" data-act="turtleView" data-v="${v}" aria-pressed="${S.turtleView === v}">${l}</button>`).join("")}</div>`;
+}
+/** ตารางน้ำหนักทั้งคอก: 4 รอบล่าสุด (วันที่ที่มีการชั่งในคอกนั้น) · ตัวที่ลดขึ้นก่อน · แตะดูกราฟรายตัว */
+function rWeights() {
+  const a = alive().filter(inZone).map(t => ({ t, f: flags(t) }))
+    .sort((x, y) => (y.f.drop !== undefined) - (x.f.drop !== undefined) || (!!y.f.noGrow) - (!!x.f.noGrow) || cmpId(x.t.id, y.t.id));
+  // เลือกคอก = คอลัมน์เป็นวันที่ชั่งจริงของคอกนั้น (เห็นว่าตัวไหนข้ามรอบ) · All = คอกชั่งคนละวัน ใช้ 4 ครั้งล่าสุดของแต่ละตัวแทน
+  const byDate = S.zone !== "ทั้งหมด";
+  const dates = byDate ? [...new Set(a.flatMap(x => hist(x.t.id).map(w => w.d)))].sort().reverse().slice(0, 4) : [];
+  const heads = byDate ? dates.map(thDate) : ["Last", "−1", "−2", "−3"];
+  const rows = a.map(({ t, f }) => {
+    const h = hist(t.id), own = h.slice(-4).reverse();
+    const cells = heads.map((_, i) => {
+      const w = byDate ? h.find(x => x.d === dates[i]) : own[i];
+      return `<td class="${!w ? "dim" : i === 0 && f.drop !== undefined ? "lo" : ""}">${w ? fmtG(w.g) : "—"}${w && !byDate ? `<div class="meta" style="font-size:11px">${thDate(w.d)}</div>` : ""}</td>`;
+    });
+    return `<tr class="tap" data-act="turtle" data-id="${esc(t.id)}"><td><b>${esc(t.id)}</b>${f.noGrow ? ` <span class="b grey">ไม่โต</span>` : ""}${isYearly(t) ? ` <span class="b grey">ปีละครั้ง</span>` : ""}</td>${cells.join("")}</tr>`;
+  });
+  return tortoiseSeg() + zoneChips()
+    + `<div class="card" style="padding:8px 10px"><div class="bar" style="margin:0 4px 4px"><span class="meta grow">${byDate ? esc(S.zone) : "All"} · ${a.length} ตัว</span><span class="meta">แตะดูกราฟ</span></div>`
+    + (a.length ? `<table class="h"><tr><th>ID</th>${heads.map(x => `<th>${x}</th>`).join("")}</tr>${rows.join("")}</table>` : `<div class="empty">ไม่มีเต่าในคอกนี้</div>`) + `</div>`;
+}
+/* ---------- Tortoise › Groups (ล็อตลูกเต่า นับเป็นจำนวน ไม่มีรหัสรายตัว) ---------- */
+function rLots() {
+  const lots = S.lots.slice().sort((a, b) => String(b.hatchD).localeCompare(String(a.hatchD)));
+  const open = lots.filter(l => lotRemaining(l) > 0), done = lots.filter(l => lotRemaining(l) === 0);
+  const total = open.reduce((n, l) => n + lotRemaining(l), 0), def = open.reduce((n, l) => n + lotDefectLeft(l), 0);
+  return tortoiseSeg()
+    + `<div class="bar"><span class="grow meta">ลูกเต่าในกลุ่ม <b>${total}</b> ตัว · เบิ้ล <b class="amber">${def}</b> · ${open.length} กลุ่ม</span><button class="btn" data-act="lotAdd">＋ Group</button></div>`
+    + (open.length ? open.map(groupCard).join("") : `<div class="empty">ยังไม่มีกลุ่มลูกเต่า · กด "+ Hatched" ในชุดไข่ แอปจะสร้างกลุ่มให้เอง</div>`)
+    + done.map(l => `<div class="card dim tap" data-act="lotOpen" data-id="${esc(l.id)}"><div class="ch"><h3>${esc(lotName(l))}</h3><span class="meta">หมดแล้ว</span></div><div class="meta">เข้า ${num(l.start)} · ขาย ${lotSold(l.id)} · ตาย ${num(l.dead)} · ให้รหัส ${num(l.split)}</div></div>`).join("");
+}
+function groupCard(l) {
+  const rem = lotRemaining(l), def = Math.min(rem, lotDefectLeft(l)), res = lotReserved(l.id);
+  return `<div class="card"><div class="ch"><h3 class="tap" data-act="lotOpen" data-id="${esc(l.id)}">${esc(lotName(l))}</h3><span class="meta">${esc(l.zone)}</span></div>
+    <div class="meta">${esc(l.sp)}${l.clutches ? ` · จาก ${esc(l.clutches)}` : ""}${l.hatchD ? ` · ฟักแรก ${thDate(l.hatchD)}` : ""}</div>
+    <div class="stat s3 sub"><div><b>${rem}</b><span>คงเหลือ${res ? ` · จอง ${res}` : ""}</span></div><div><b>${rem - def}</b><span>ปกติ</span></div><div><b class="${def ? "amber" : ""}">${def}</b><span>เบิ้ล</span></div></div>
+    <div class="meta" style="margin-top:6px">เข้า ${num(l.start)} · ตาย ${num(l.dead)} · ขาย ${lotSold(l.id)} · ให้รหัส ${num(l.split)}</div>
+    <div class="quick g4"><button data-act="lotDeath" data-id="${esc(l.id)}">Died −</button><button class="main" data-act="lotSell" data-id="${esc(l.id)}">Sell</button><button data-act="lotSplit" data-id="${esc(l.id)}">Give ID</button><button data-act="lotMove" data-id="${esc(l.id)}">Move</button></div></div>`;
+}
+function rMoney() {
+  const mm = monthMoney(todayISO()), income = incomingTotal(mm), expense = outgoingTotal(mm);
+  const categories = {};
+  mm.filter(x => x.direction === "จ่าย").forEach(x => { categories[x.category] = (categories[x.category] || 0) + num(x.amount); });
+  const pendingSales = S.money.filter(x => x.saleStatus === "deposit");
+  const pendingBalance = pendingSales.reduce((n, x) => n + Math.max(0, num(x.total) - num(x.amount)), 0);
+  const recent = S.money.slice().sort((a, b) => String(b.date).localeCompare(String(a.date)) || String(b.id).localeCompare(String(a.id))).slice(0, 20);
+  const months = Array.from({ length: 12 }, (_, i) => {
+    const d = parseISO(todayISO()); d.setDate(1); d.setMonth(d.getMonth() - (11 - i));
+    const key = iso(d).slice(0, 7), rows = S.money.filter(x => String(x.date).startsWith(key));
+    return { key, income: incomingTotal(rows), expense: outgoingTotal(rows) };
+  });
+  const year = todayISO().slice(0, 4), sales = {};
+  S.money.filter(x => x.direction === "รับ" && x.category === "ขายเต่า" && x.saleStatus === "paid" && String(x.date).startsWith(year)).forEach(x => {
+    let species = x.turtleId && idx().byId[x.turtleId] ? idx().byId[x.turtleId].sp : "";
+    if (x.lotId) { const lot = S.lots.find(l => l.id === x.lotId); species = lot ? lot.sp : ""; }
+    if (!species || !(num(x.quantity) > 0)) return;
+    const row = sales[species] || (sales[species] = { sum: 0, quantity: 0 });
+    row.sum += num(x.total); row.quantity += num(x.quantity);
+  });
+  const net = income - expense, prevKey = previousMonthKey(todayISO()), pm = S.money.filter(x => String(x.date).startsWith(prevKey)), prevNet = incomingTotal(pm) - outgoingTotal(pm);
+  const shown = recent.slice(0, S.moneyAll ? 20 : 8);
+  // ลำดับ: เดือนนี้ → 3 ปุ่ม → รายการล่าสุด (แตะแก้/ลบ) → แยกหมวด → ที่เหลือพับไว้
+  return `<div class="card"><div class="ch"><h3>${EN_M[parseISO(todayISO()).getMonth()]}</h3><span class="meta">เดือนก่อน Net ${prevNet < 0 ? "−" : ""}${baht(Math.abs(prevNet))}</span></div><div class="stat s3"><div><b class="green">${baht(income)}</b><span>In</span></div><div><b>${baht(expense)}</b><span>Out</span></div><div><b class="${net < 0 ? "red" : "green"}">${net < 0 ? "−" : ""}${baht(Math.abs(net))}</b><span>Net</span></div></div></div>`
+    + `<div class="quick" style="grid-template-columns:repeat(3,1fr)"><button class="main" data-act="moneyOpen" data-kind="sale">${ICON.sell}Sell</button><button data-act="moneyOpen" data-kind="expense">${ICON.expense}Expense</button><button data-act="moneyOpen" data-kind="other">${ICON.income}Income</button></div>`
+    + (pendingSales.length ? `<div class="card"><h3>มัดจำค้าง ${baht(pendingBalance)}</h3>${pendingSales.map(x => `<div class="row"><div class="grow"><b>${esc(x.turtleId || moneyLotName(x.lotId))}</b><div class="meta">${thDate(x.date)} · รับมัดจำ ${baht(x.amount)} / ราคาเต็ม ${baht(x.total)}</div></div><button class="btn ghost" data-act="saleComplete" data-id="${esc(x.id)}">รับส่วนที่เหลือ</button></div>`).join("")}</div>` : "")
+    + `<div class="card"><div class="ch"><h3>Recent</h3><span class="meta">แตะเพื่อแก้/ลบ</span></div>${shown.length ? shown.map(x => `<div class="row tap" data-act="moneyEdit" data-id="${esc(x.id)}"><div class="grow"><b>${esc(x.category)}</b><div class="meta">${thDate(x.date)}${moneyDetail(x)}${x.note ? ` · ${esc(x.note)}` : ""}</div></div><b class="${x.direction === "รับ" ? "green" : ""}">${x.direction === "รับ" ? "+" : "−"}${baht(x.amount)}</b></div>`).join("") : `<div class="empty">ยังไม่มีรายการเงิน · กด Sell / Expense / Income</div>`}${recent.length > shown.length ? `<div class="row tap" data-act="moneyAll"><span class="grow meta">ดูเพิ่ม</span><span class="lnk">▸</span></div>` : ""}</div>`
+    + (Object.keys(categories).length ? `<div class="card"><h3>Out by category</h3>${Object.keys(categories).sort((a, b) => categories[b] - categories[a]).map(k => `<div class="row"><span class="grow">${esc(k)}</span><b>${baht(categories[k])}</b></div>`).join("")}</div>` : "")
+    + `<div class="card"><button class="lnk" data-act="recurringExpense">ลงรายจ่ายประจำ (เติมยอดเดือนก่อน) ▸</button></div>`
+    + `<details class="card fold"><summary>12 months</summary>${months.slice().reverse().filter(m => m.income || m.expense).map(m => `<div class="row"><span class="grow">${EN_M[Number(m.key.slice(5)) - 1]} ${yy(m.key.slice(0, 4))}</span><span class="green">${baht(m.income)}</span><span>${baht(m.expense)}</span></div>`).join("") || `<div class="meta">ยังไม่มีข้อมูล</div>`}</details>`
+    + (Object.keys(sales).length ? `<details class="card fold"><summary>ราคาเฉลี่ยต่อตัว ปี ${yy(year)}</summary>${Object.keys(sales).map(s => `<div class="row"><span class="grow">${esc(s)}</span><b>${baht(sales[s].sum / sales[s].quantity)}</b><span class="meta">${sales[s].quantity} ตัว</span></div>`).join("")}</details>` : "");
+}
+const moneyLotName = id => { const l = lotById(id); return l ? lotName(l) : id; };
+function moneyDetail(x) {
+  if (x.lotId) return ` · ${esc(moneyLotName(x.lotId))}${num(x.quantity) ? ` · ${num(x.quantity)} ตัว${num(x.defectQty) ? ` (เบิ้ล ${num(x.defectQty)})` : ""}` : ""}`;
+  return x.turtleId ? ` · เต่า ${esc(x.turtleId)}` : "";
+}
+/** Todo ทั้งหมด (ย้ายจากแท็บมาเป็นหน้าต่างจาก Home → All) */
+function openTasks() {
+  const tasks = S.tasks.filter(t => !t.done).slice().sort((a, b) => String(a.dueDate).localeCompare(String(b.dueDate)));
+  S.form = null;
+  openModal(head("Tasks", `${tasks.length} งาน`)
+    + `<div class="list" style="margin-bottom:10px">${tasks.length ? tasks.map(taskRow).join("") : `<div class="empty">ยังไม่มีงานค้าง</div>`}</div>`
+    + `<div class="meta" style="margin-bottom:6px">เพิ่มงานที่ทำบ่อย</div><div class="chips">${["เปลี่ยนหลอด UVB", "ถ่ายพยาธิ", "เปลี่ยนทราย", "เก็บไข่"].map(x => `<button class="chip" data-act="taskTemplate" data-v="${esc(x)}">${esc(x)}</button>`).join("")}</div>`
+    + `<div class="acts"><button class="btn" data-act="taskAdd">＋ Add task</button></div>`);
+}
+/** แก้รายการ Watch: ตัวที่เฝ้าดูอยู่ (กด Done) + เพิ่มตัวที่อยากดูเป็นพิเศษ */
+function openWatchEdit() {
+  const list = alive().filter(t => t.watch).sort((a, b) => cmpId(a.id, b.id));
+  S.form = { _watchAdd: "" };
+  openModal(head("Watch", "เลือกตัวที่อยากดูเป็นพิเศษ")
+    + `<div class="list" style="margin-bottom:12px">${list.length ? list.map(t => `<div class="row"><div class="grow"><b>${esc(t.id)}</b> <span class="meta">${esc(t.sp)} · ${esc(t.zone)}</span><div class="meta">${esc(t.wNote || "Watch")} · ตั้งแต่ ${thDate(t.watch)}</div></div><button class="okb" data-act="unwatch" data-id="${esc(t.id)}" data-home="1">Done</button></div>`).join("") : `<div class="empty">ยังไม่มีตัวที่เฝ้าดูเอง</div>`}</div>`
+    + `<label class="fl"><span>เพิ่มตัวที่อยากดู (รหัส)</span><input class="fld" data-f="_watchAdd" list="watchList" autocomplete="off" inputmode="text" placeholder="เช่น 12"></label>
+       <datalist id="watchList">${alive().filter(t => !t.watch).sort((a, b) => cmpId(a.id, b.id)).map(t => `<option value="${esc(t.id)}">${esc(t.sp)} · ${esc(t.zone)}</option>`).join("")}</datalist>
+       <div class="hint" style="margin:-6px 0 10px">เตือนไข่ (Eggs due / Egg season) แอปใส่ให้เองจากบันทึกไข่ · ปรับจำนวนวันได้ใน ⚙</div>
+       <div class="acts"><button class="btn ghost" data-act="close">ปิด</button><button class="btn" data-act="watchAddGo">เพิ่ม</button></div>`);
+}
+
+/* ================= หน้าต่างย่อย (modal) ================= */
+function openModal(html) { const m = $("#modal"); m.innerHTML = `<div class="sheet" role="dialog" aria-modal="true">${html}</div>`; m.hidden = false; m.firstChild.scrollTop = 0; }
+function closeModal() { $("#modal").hidden = true; $("#modal").innerHTML = ""; S.form = null; }
+const head = (title, sub) => `<div class="mh"><h2>${title}${sub ? ` <small>${sub}</small>` : ""}</h2><button class="x" data-act="close" aria-label="ปิด">✕</button></div>`;
+// ค่าในโค้ดเป็นอังกฤษ แต่ปุ่มโชว์ไทย
+const LBL = { turtle: "รายตัว", lot: "กลุ่ม", paid: "จ่ายครบ", deposit: "มัดจำ", other: "รายรับอื่น", buy: "ซื้อเต่า", normal: "ปกติ", defect: "เบิ้ล", zone: "ตามคอก", yearly: "Yearly" };
+// รอบชั่งตามคอก (⚙) · 0 = Auto ตามกลุ่ม
+const CYCLES = [[0, "Auto"], [5, "5 days"], [14, "2 weeks"], [30, "Monthly"], [365, "Yearly"]];
+const cycleLabel = n => { const c = CYCLES.find(x => x[0] === num(n)); return c ? c[1] : `ทุก ${num(n)} วัน`; };
+// ทำซ้ำของงาน (Korn: Monthly / Every 6 months / Yearly เป็นอังกฤษ)
+const REPEATS = [[0, "Once"], [30, "Monthly"], [182, "Every 6 months"], [365, "Yearly"]];
+// Do within: ทำให้เสร็จภายในกี่วันนับจากวันนี้ (ใช้ทั้งตอนเพิ่มและตอนเลื่อนงาน) · Home โชว์งานที่ต้องเสร็จใน TASK_AHEAD วัน
+const WITHIN = [[7, "1 week"], [30, "1 month"], [91, "3 months"]];
+const TASK_AHEAD = 7;
+const segRow = (k, opts, v) => `<div class="seg" role="group">${opts.map(o => `<button type="button" data-act="fset" data-k="${k}" data-v="${esc(o)}" aria-pressed="${v === o}">${esc(LBL[o] || o)}</button>`).join("")}</div>`;
+// ปุ่มติ๊กแทน dropdown (Korn 2026-11-15: dropdown ดูล้าสมัย) · addKind = มีปุ่ม ＋ New ท้ายแถว เพิ่มคอก/สายพันธุ์/หมวดใหม่ได้จากฟอร์มเลย
+const chipRow = (k, opts, v, addKind) => `<div class="chips wrap" role="group">${opts.map(o => `<button type="button" class="chip" data-act="fset" data-k="${k}" data-v="${esc(o)}" aria-pressed="${v === o}">${esc(o)}</button>`).join("")}${addKind ? `<button type="button" class="chip add" data-act="listNew" data-kind="${addKind}" data-k="${k}">＋ New</button>` : ""}</div>`;
+/** ตัวเลือกสายพันธุ์: ที่ตั้งไว้ + ค่าปัจจุบัน (ถ้าเป็นพันธุ์ที่ลบจากรายการไปแล้ว) */
+const spOpts = v => v && S.set.species.indexOf(v) < 0 ? S.set.species.concat([v]) : S.set.species;
+// วันที่: ปุ่ม วันนี้/เมื่อวาน + ช่องเลือกวันเผื่อย้อนหลัง
+// future = วันครบกำหนดงาน (วันนี้/พรุ่งนี้ ไม่จำกัดวันในอนาคต)
+const dateRow = (k, v, label, future) => {
+  const b = future ? [[todayISO(), "วันนี้"], [addDays(todayISO(), 1), "พรุ่งนี้"]] : [[todayISO(), "วันนี้"], [addDays(todayISO(), -1), "เมื่อวาน"]];
+  return `<div class="fl"><span>${label || "วันที่"}</span><div class="dq"><div class="seg" role="group">${b.map(([d, l]) => `<button type="button" data-act="fset" data-k="${k}" data-v="${d}" aria-pressed="${v === d}">${l}</button>`).join("")}</div><input class="fld" type="date" data-f="${k}" value="${esc(v)}"${future ? "" : ` max="${todayISO()}"`} aria-label="${label || "วันที่"}"></div></div>`;
+};
+const optList = (opts, v) => opts.map(o => `<option${o === v ? " selected" : ""}>${esc(o)}</option>`).join("");
+
+// Money เหลือ 3 ปุ่ม: Sell · Expense · Income (ซื้อเต่าอยู่ใน Income ตามที่ Korn ตกลง) · มัดจำซ่อนไว้ โค้ด/ชีตยังอยู่
+function moneyTitle(f) { return f.editId ? "Edit" : ({ sale: "Sell", buy: "Income", expense: "Expense", other: "Income" })[f.kind]; }
+function openMoney(kind, preset) {
+  const sellable = S.lots.filter(l => lotAvail(l) > 0);
+  const f = { kind, date: todayISO(), amount: "", total: "", price: "", category: "", target: sellable.length ? "lot" : "turtle", turtleId: "", lotId: sellable.length === 1 ? sellable[0].id : "", n: "", dq: "", saleStatus: "paid", delivery: "", _link: "", editId: "",
+    id: "", sp: S.set.species[0], sex: "ไม่ทราบ", zone: S.set.zones[0], grp: "ตัวกลาง", weight: "", docType: "ไม่มี", docNo: "", linked: "", note: "", ...(preset || {}) };
+  S.form = f;
+  renderMoneyForm();
+}
+/** แตะรายการใน Recent = เปิดฟอร์มเดิมพร้อมค่าเดิม (แก้หรือลบ) */
+function openMoneyEdit(id) {
+  const x = S.money.find(m => m.id === id);
+  if (!x) return;
+  if (/^(deposit|balance)$/.test(x.saleStatus)) { alert("รายการมัดจำ ให้แก้ใน Google Sheet"); return; }
+  const base = { editId: id, date: x.date, note: x.note || "", docNo: x.docNo || "", amount: String(x.amount) };
+  if (x.category === "ขายเต่า") openMoney("sale", Object.assign(base, { target: x.lotId ? "lot" : "turtle", turtleId: x.turtleId || "", lotId: x.lotId || "", n: x.lotId ? String(num(x.quantity) - num(x.defectQty)) : "", dq: num(x.defectQty) ? String(num(x.defectQty)) : "", total: String(num(x.total) || num(x.amount)) }));
+  else if (x.category === "ซื้อเต่า") openMoney("buy", Object.assign(base, { id: x.turtleId || "" }));
+  else openMoney(x.direction === "จ่าย" ? "expense" : "other", Object.assign(base, { category: x.category, linked: x.turtleId || "" }));
+}
+function saleCalcText() {
+  const f = S.form, q = Math.max(0, Math.round(num(f.n))) + Math.max(0, Math.round(num(f.dq)));
+  return q ? `รวม ${q} ตัว${num(f.price) > 0 ? ` × ${baht(f.price)} = ${baht(q * num(f.price))}` : ""}` : "";
+}
+function renderMoneyForm() {
+  const f = S.form, ed = !!f.editId, cats = S.set.moneyCats;
+  const amountBig = (label, key) => `<label class="fl"><span>${label}</span><input class="fld big" data-f="${key}" inputmode="decimal" value="${esc(f[key])}" placeholder="0"></label>`;
+  const sub = ed ? esc(f.editId) : f.kind === "sale" ? "ขายเต่า" : f.kind === "expense" ? "รายจ่ายฟาร์ม" : "";
+  let fields = !ed && (f.kind === "other" || f.kind === "buy") ? `<div class="fl">${segRow("kind", ["other", "buy"], f.kind)}</div>` : "";
+  fields += dateRow("date", f.date, f.kind === "buy" ? "วันที่ได้มา" : "วันที่");
+  if (f.kind === "sale") {
+    if (!ed) fields += `<div class="fl"><span>ขายอะไร</span>${segRow("target", ["lot", "turtle"], f.target)}</div>`;
+    if (f.target === "lot") {
+      // ขายจากกลุ่ม: แยกจำนวน ปกติ/เบิ้ล · ใส่ราคาต่อตัว แอปคูณให้ (แก้ยอดรวมเองได้)
+      const lot = lotById(f.lotId), old = ed ? S.money.find(x => x.id === f.editId) : null;
+      const avail = lot ? lotAvail(lot) + (old ? num(old.quantity) : 0) : 0, def = lot ? Math.min(avail, lotDefectLeft(lot) + (old ? num(old.defectQty) : 0)) : 0;
+      const lots = S.lots.filter(l => lotAvail(l) > 0);
+      fields += ed ? `<div class="fl"><span>กลุ่ม</span><b>${esc(lot ? lotName(lot) : f.lotId)}</b></div>`
+        : `<label class="fl"><span>กลุ่ม</span><select class="fld" data-f="lotId" data-live="money"><option value="">เลือกกลุ่ม</option>${lots.map(l => `<option value="${esc(l.id)}"${f.lotId === l.id ? " selected" : ""}>${esc(lotName(l))} · เหลือ ${lotAvail(l)}${lotDefectLeft(l) ? ` (เบิ้ล ${Math.min(lotAvail(l), lotDefectLeft(l))})` : ""}</option>`).join("")}</select></label>`;
+      if (lot) fields += `<div class="two"><label class="fl"><span>ปกติ (ตัว) · มี ${avail - def}</span><input class="fld big" data-f="n" inputmode="numeric" value="${esc(f.n)}" placeholder="0"></label>${def || num(f.dq) ? `<label class="fl"><span class="amber">เบิ้ล (ตัว) · มี ${def}</span><input class="fld big" data-f="dq" inputmode="numeric" value="${esc(f.dq)}" placeholder="0"></label>` : ""}</div>`;
+      fields += `<div class="two"><label class="fl"><span>ราคา/ตัว (บาท)</span><input class="fld big" data-f="price" inputmode="decimal" value="${esc(f.price)}" placeholder="0"></label>${amountBig("รวม (บาท)", "total")}</div><div class="calc" id="saleCalc">${saleCalcText()}</div>`;
+    } else {
+      const t = idx().byId[f.turtleId];
+      fields += ed ? `<div class="fl"><span>เต่า</span><b>${esc(f.turtleId)}${t ? ` · ${esc(t.sp)}` : ""}</b></div>`
+        : `<label class="fl"><span>เต่ารหัส</span><select class="fld" data-f="turtleId"><option value="">เลือกเต่า</option>${alive().sort((a, b) => cmpId(a.id, b.id)).map(t => `<option value="${esc(t.id)}"${f.turtleId === t.id ? " selected" : ""}>${esc(t.id)} · ${esc(t.sp)}</option>`).join("")}</select></label>`;
+      fields += amountBig("ราคา (บาท)", "total") + `<label class="fl"><span>เลขเอกสาร <small>(ถ้ามี)</small></span><input class="fld" data-f="docNo" value="${esc(f.docNo)}"></label>`;
+    }
+  } else if (f.kind === "buy" && ed) {
+    fields += `<div class="fl"><span>เต่า</span><b>${esc(f.id)}</b></div>${amountBig("ราคา (บาท)", "amount")}<div class="hint" style="margin:-4px 0 10px">ข้อมูลเต่าแก้ที่ Tortoise → All</div>`;
+  } else if (f.kind === "buy") {
+    fields += `<label class="fl"><span>รหัสเต่าใหม่</span><input class="fld" data-f="id" value="${esc(f.id)}" autocomplete="off"></label>
+      <div class="fl"><span>สายพันธุ์</span>${chipRow("sp", spOpts(f.sp), f.sp, "species")}</div>
+      <div class="fl"><span>โซน/คอก</span>${chipRow("zone", S.set.zones, f.zone, "zones")}</div>
+      <div class="fl"><span>เพศ</span>${segRow("sex", SEXES, f.sex)}</div>
+      <div class="fl"><span>กลุ่ม</span>${segRow("grp", GROUPS, f.grp)}</div>
+      ${amountBig("ราคา (บาท)", "amount")}
+      <label class="fl"><span>น้ำหนัก <small>(กรัม ไม่บังคับ)</small></span><input class="fld" data-f="weight" inputmode="decimal" value="${esc(f.weight)}"></label>
+      <div class="fl"><span>เอกสาร</span>${segRow("docType", ["ไม่มี", "CITES", "ใบครอบครอง", "อื่นๆ"], f.docType)}</div>
+      ${f.docType !== "ไม่มี" ? `<label class="fl"><span>เลขที่เอกสาร</span><input class="fld" data-f="docNo" value="${esc(f.docNo)}"></label>` : ""}`;
+  } else if (f.kind === "expense") {
+    fields += `<div class="fl"><span>หมวด</span>${chipRow("category", cats.indexOf(f.category) < 0 && f.category ? cats.concat([f.category]) : cats, f.category, "moneyCats")}</div>` + amountBig("จำนวนเงิน (บาท)", "amount");
+    // ซื้อผักมีค่าส่งทุกครั้ง: ใส่ในฟอร์มเดียว แอปบันทึกแยกเป็นหมวด "ค่าส่งผัก" ให้
+    if (f.category === "ผัก" && !ed) fields += `<label class="fl"><span>ค่าส่งผัก (บาท) <small>ถ้ามี · บันทึกแยกหมวดให้</small></span><input class="fld" data-f="delivery" inputmode="decimal" value="${esc(f.delivery)}" placeholder="0"></label>`;
+    fields += f._link || f.linked ? `<label class="fl"><span>ผูกกับเต่า <small>(หลายรหัสคั่นด้วย ,)</small></span><input class="fld" data-f="linked" value="${esc(f.linked)}" placeholder="เช่น 12, 15"></label>`
+      : `<div style="margin:-4px 0 10px"><button type="button" class="lnk" data-act="fset" data-k="_link" data-v="1">ผูกกับเต่ารายตัว (ค่าหมอ ค่าส่ง) ▸</button></div>`;
+  } else {
+    const past = [...new Set(S.money.filter(x => x.direction === "รับ" && !/^ขายเต่า/.test(x.category)).map(x => x.category))].slice(0, 6);
+    fields += `<label class="fl"><span>รายรับจากอะไร</span><input class="fld" data-f="category" value="${esc(f.category)}" placeholder="เช่น ขายอุปกรณ์"></label>${past.length ? `<div style="margin:-6px 0 10px">${chipRow("category", past, f.category)}</div>` : ""}` + amountBig("จำนวนเงิน (บาท)", "amount");
+  }
+  fields += `<label class="fl"><span>โน้ต <small>(ถ้ามี)</small></span><input class="fld" data-f="note" value="${esc(f.note)}"></label>`;
+  openModal(head(moneyTitle(f), sub) + fields + `<div class="acts">${ed ? `<button class="btn danger" data-act="moneyDel" data-busy>ลบ</button>` : `<button class="btn ghost" data-act="close">ยกเลิก</button>`}<button class="btn" data-act="moneySave" data-busy>บันทึก</button></div>`);
+}
+async function saveMoneyForm() {
+  const f = clone(S.form), ed = f.editId, old = ed ? S.money.find(x => x.id === ed) : null;
+  const done = r => { if (r) { closeModal(); render(); } };
+  if (!f.date) { alert("ใส่วันที่"); return; }
+  if (f.kind === "sale") {
+    const total = num(f.total);
+    let quantity = 1, dq = 0;
+    if (f.target === "lot") {
+      const lot = lotById(f.lotId);
+      if (!lot) { alert("เลือกกลุ่ม"); return; }
+      const n = Math.round(num(f.n)); dq = Math.round(num(f.dq)); quantity = n + dq;
+      const avail = lotAvail(lot) + (old ? num(old.quantity) : 0), def = lotDefectLeft(lot) + (old ? num(old.defectQty) : 0);
+      if (n < 0 || dq < 0 || !(quantity > 0)) { alert("ใส่จำนวนที่ขาย"); return; }
+      if (quantity > avail) { alert(`ขาย ${quantity} ตัว มากกว่าที่เหลือในกลุ่ม (${avail} ตัว)`); return; }
+      if (dq > def) { alert(`เบิ้ลในกลุ่มมี ${def} ตัว`); return; }
+    } else if (!f.turtleId) { alert("เลือกเต่า"); return; }
+    if (!(total > 0)) { alert("ใส่ราคา"); return; }
+    const item = { date: f.date, direction: "รับ", category: "ขายเต่า", amount: total, turtleId: f.target === "turtle" ? f.turtleId : "", lotId: f.target === "lot" ? f.lotId : "", quantity, total, saleStatus: "paid", docNo: f.docNo || "", note: f.note, defectQty: dq };
+    if (ed) { item.id = ed; done(await save("apiUpdateMoney", [item], () => local.moneyUpd(item), "แก้แล้ว")); return; }
+    done(await save("apiRecordSale", [item], res => {
+      local.money(Object.assign({}, item, { id: res.id }));
+      if (item.turtleId) local.turtles([Object.assign(clone(idx().byId[item.turtleId]), { status: SOLD, sDate: f.date, sNote: "ขายแล้ว", watch: "", wNote: "" })]);
+    }, `บันทึกการขายแล้ว${f.target === "lot" ? ` · ${quantity} ตัว` : ""}`));
+    return;
+  }
+  const amount = num(f.amount);
+  if (!(amount > 0)) { alert("ใส่ยอดเงิน"); return; }
+  if (f.kind === "buy" && ed) {
+    const item = Object.assign(clone(old), { date: f.date, amount, total: amount, note: f.note });
+    done(await save("apiUpdateMoney", [item], () => local.moneyUpd(item), "แก้แล้ว"));
+    return;
+  }
+  if (f.kind === "buy") {
+    const id = String(f.id || "").trim();
+    if (!id || idx().byId[id]) { alert(id ? "รหัสนี้มีอยู่แล้ว" : "ใส่รหัสเต่า"); return; }
+    const turtle = Object.assign(blankTurtle(), { id, sp: f.sp, sex: f.sex, grp: f.grp, zone: f.zone, src: "ซื้อมา", born: f.date, docType: f.docType, docNo: f.docNo });
+    const item = { date: f.date, amount, note: f.note, docNo: f.docNo || "" };
+    if (await save("apiBuyTurtle", [item, turtle], res => {
+      local.turtles([turtle]);
+      local.money({ id: res.id, date: f.date, direction: "จ่าย", category: "ซื้อเต่า", amount, turtleId: id, quantity: 1, total: amount, saleStatus: "", docNo: f.docNo, note: f.note });
+    }, "บันทึกซื้อเต่าแล้ว")) {
+      if (num(f.weight) > 0) {
+        const entry = [{ id, g: num(f.weight), note: "น้ำหนักตอนซื้อ" }];
+        await save("apiSaveWeights", [f.date, entry], () => local.weights(f.date, entry));
+      }
+      closeModal(); render();
+    }
+    return;
+  }
+  const isExpense = f.kind === "expense", category = String(f.category || "").trim();
+  // ไม่เลือกหมวดให้ก่อน (กันลืมเปลี่ยนแล้วยอดไปรวมผิดหมวด) · ปุ่ม Food/Labor บน Home เลือกให้เอง
+  if (!category) { alert(isExpense ? "เลือกหมวดรายจ่าย" : "ใส่ว่ารายรับจากอะไร"); return; }
+  const linked = isExpense ? [...new Set(String(f.linked || "").split(/[,\s]+/).filter(Boolean))] : [];
+  const missing = linked.filter(id => !idx().byId[id]);
+  if (missing.length) { alert("ไม่พบรหัสเต่า: " + missing.join(", ")); return; }
+  const item = { date: f.date, direction: isExpense ? "จ่าย" : "รับ", category, amount, turtleId: linked.join(","), lotId: "", quantity: 0, total: 0, saleStatus: "", docNo: "", note: f.note, defectQty: 0 };
+  if (ed) { item.id = ed; done(await save("apiUpdateMoney", [item], () => local.moneyUpd(item), "แก้แล้ว")); return; }
+  const delivery = isExpense && category === "ผัก" ? num(f.delivery) : 0;
+  if (delivery > 0) {
+    const items = [item, Object.assign({}, item, { category: "ค่าส่งผัก", amount: delivery, turtleId: "" })];
+    done(await save("apiSaveMoneyBatch", [items], res => items.forEach((it, i) => local.money(Object.assign({}, it, { id: res.items[i].id }))), `บันทึกแล้ว · ผัก + ค่าส่ง ${baht(amount + delivery)}`));
+    return;
+  }
+  done(await save("apiSaveMoney", [item], res => local.money(Object.assign({}, item, { id: res.id })), "บันทึกแล้ว"));
+}
+async function deleteMoney() {
+  const x = S.money.find(m => m.id === S.form.editId);
+  if (!x) return;
+  const extra = x.category === "ขายเต่า" && x.turtleId ? `\nเต่า ${x.turtleId} จะกลับเป็นมีชีวิต`
+    : x.category === "ซื้อเต่า" ? `\nเต่า ${x.turtleId} ยังอยู่ในทะเบียน (ถ้าเพิ่มผิด ลบได้ที่หน้าเต่า)`
+    : x.lotId ? `\nกลุ่ม ${moneyLotName(x.lotId)} จะได้คืน ${num(x.quantity)} ตัว` : "";
+  if (!confirm(`ลบ ${x.category} ${baht(x.amount)} (${thDate(x.date)})?${extra}`)) return;
+  if (await save("apiDeleteMoney", [x.id], () => {
+    local.delMoney(x.id);
+    const t = x.category === "ขายเต่า" && x.turtleId ? idx().byId[x.turtleId] : null;
+    if (t && t.status === SOLD) local.turtles([Object.assign(clone(t), { status: ALIVE, sDate: "", sNote: "" })]);
+  }, "ลบแล้ว")) { closeModal(); render(); }
+}
+function openRecurringExpenses() {
+  const categories = ["ค่าแรงประจำ", "ผัก", "ค่าส่งผัก", "อาหารเม็ด"];
+  S.form = { date: todayISO(), amounts: categories.map(previousCategoryTotal), categories };
+  openModal(head("ลงรายจ่ายประจำ")
+    + `<div class="hint" style="margin-bottom:10px">ยอดเดือนก่อนถูกเติมให้อัตโนมัติ แก้เฉพาะยอดที่ต่าง แล้วบันทึกได้เลย</div>
+       ${dateRow("date", S.form.date)}
+       ${categories.map((category, i) => `<label class="fl"><span>${esc(category)} (เดือนก่อน ${baht(S.form.amounts[i])})</span><input class="fld" data-batch="${i}" inputmode="decimal" value="${esc(S.form.amounts[i] || "")}"></label>`).join("")}
+       <div class="acts"><button class="btn ghost" data-act="close">ยกเลิก</button><button class="btn" data-act="recurringSave" data-busy>บันทึก</button></div>`);
+}
+async function saveRecurringExpenses() {
+  const f = S.form, items = f.categories.map((category, i) => ({ date: f.date, direction: "จ่าย", category, amount: num(f.amounts[i]), turtleId: "", lotId: "", quantity: 0, total: 0, saleStatus: "", docNo: "", note: "" })).filter(x => x.amount > 0);
+  if (!f.date || !items.length) { alert("ใส่วันที่และยอดอย่างน้อย 1 รายการ"); return; }
+  const result = await save("apiSaveMoneyBatch", [items], res => items.forEach((item, i) => local.money(Object.assign({}, item, { id: res.items[i].id }))), "บันทึกรายจ่ายประจำแล้ว");
+  if (result) { closeModal(); render(); }
+}
+function openCompleteSale(id) {
+  const sale = S.money.find(x => x.id === id);
+  if (!sale) return;
+  S.form = { saleId: id, date: todayISO(), amount: String(Math.max(0, Math.round(num(sale.total) * 100) - Math.round(num(sale.amount) * 100)) / 100) };
+  openModal(head("รับส่วนที่เหลือ", esc(sale.turtleId || sale.lotId))
+    + `<label class="fl"><span>วันที่</span><input class="fld" type="date" data-f="date" value="${S.form.date}" max="${todayISO()}"></label>
+       <div class="card">ราคาเต็ม ${baht(sale.total)} · มัดจำ ${baht(sale.amount)}</div>
+       <label class="fl"><span>ยอดรับส่วนที่เหลือ (บาท)</span><input class="fld" data-f="amount" inputmode="decimal" value="${esc(S.form.amount)}"></label>
+       <div class="acts"><button class="btn ghost" data-act="close">ยกเลิก</button><button class="btn" data-act="saleCompleteSave" data-busy>บันทึกยอดรับ</button></div>`);
+}
+async function saveCompleteSale() {
+  const f = S.form, sale = S.money.find(x => x.id === f.saleId);
+  if (!sale || !(num(f.amount) > 0) || Math.round((num(f.amount) + num(sale.amount)) * 100) !== Math.round(num(sale.total) * 100)) { alert("ยอดรับสะสมต้องเท่ากับราคาขายเต็ม"); return; }
+  if (await save("apiCompleteSale", [f.saleId, num(f.amount), f.date], () => {
+    sale.saleStatus = "paid";
+    local.money({ id: "balance-" + sale.id, date: f.date, direction: "รับ", category: "ขายเต่า (ยอดคงเหลือ)", amount: num(f.amount), turtleId: sale.turtleId, lotId: sale.lotId, quantity: 0, total: 0, saleStatus: "balance", note: "ยอดคงเหลือ" });
+    if (sale.turtleId) local.turtles([Object.assign(clone(idx().byId[sale.turtleId]), { status: SOLD, sDate: f.date, sNote: "ขายแล้ว", watch: "", wNote: "" })]);
+  }, "ปิดยอดขายแล้ว")) { closeModal(); render(); }
+}
+
+function nextGroupId() {
+  return "G" + String(S.lots.reduce((m, l) => { const g = String(l.id).match(/^G(\d+)$/); return g ? Math.max(m, Number(g[1])) : m; }, 0) + 1).padStart(3, "0");
+}
+function openLot(id) {
+  const lot = id ? clone(S.lots.find(x => x.id === id)) : { id: nextGroupId(), sp: S.set.species[0], hatchD: todayISO(), clutches: "", start: "", zone: S.set.zones[0], note: "", dead: 0, split: 0, sold: 0, name: "", defect: 0, deadDefect: 0 };
+  if (!lot) return;
+  S.form = Object.assign(lot, { _lotNew: !id });
+  renderLot();
+}
+function renderLot() {
+  const l = S.form, isNew = l._lotNew;
+  openModal(head(isNew ? "New group" : esc(lotName(l)), isNew ? "ลูกเต่าที่ไม่ตั้งรหัส นับเป็นจำนวน" : esc(l.id))
+    + `<label class="fl"><span>ชื่อกลุ่ม <small>(ว่าง = สายพันธุ์ + คอก)</small></span><input class="fld" data-f="name" value="${esc(l.name || "")}" placeholder="${esc(l.sp)} ${esc(l.zone)}"></label>
+       <div class="fl"><span>สายพันธุ์</span>${chipRow("sp", spOpts(l.sp), l.sp, "species")}</div>
+       <div class="fl"><span>คอก</span>${chipRow("zone", S.set.zones.indexOf(l.zone) < 0 && l.zone ? S.set.zones.concat([l.zone]) : S.set.zones, l.zone, "zones")}</div>
+       <div class="two"><label class="fl"><span>จำนวนเข้า (ตัว)</span><input class="fld" data-f="start" inputmode="numeric" value="${esc(l.start)}"></label><label class="fl"><span>ในนั้นเบิ้ล (ตัว)</span><input class="fld" data-f="defect" inputmode="numeric" value="${esc(l.defect || 0)}"></label></div>
+       <label class="fl"><span>วันฟักแรก</span><input class="fld" type="date" data-f="hatchD" value="${esc(l.hatchD)}"></label>
+       <label class="fl"><span>จากชุดไข่ <small>(คั่นด้วย , · แอปเติมให้เองเมื่อกด + Hatched)</small></span><input class="fld" data-f="clutches" value="${esc(l.clutches)}"></label>
+       <label class="fl"><span>โน้ต</span><input class="fld" data-f="note" value="${esc(l.note)}"></label>`
+    + (!isNew ? `<div class="meta" style="margin-bottom:10px">คงเหลือ ${lotRemaining(l)} · ขายแล้ว ${lotSold(l.id)} · จอง ${lotReserved(l.id)} · ตาย ${l.dead || 0} (เบิ้ล ${l.deadDefect || 0}) · ให้รหัส ${l.split || 0}</div>` : "")
+    + `<div class="acts">${isNew ? "" : `<button class="btn danger" data-act="lotDelete" data-id="${esc(l.id)}">ลบ</button>`}<button class="btn" data-act="lotSave" data-busy>Save</button></div>`);
+}
+async function saveLotForm() {
+  const l = clone(S.form); delete l._lotNew;
+  l.name = String(l.name || "").trim(); l.defect = Math.max(0, Math.round(num(l.defect)));
+  if (!String(l.id || "").trim() || !(num(l.start) > 0) || !l.sp || !l.hatchD) { alert("กรอกสายพันธุ์ วันฟัก และจำนวนเข้า"); return; }
+  if (l.defect > num(l.start)) { alert("เบิ้ลมากกว่าจำนวนเข้า"); return; }
+  if (await save("apiSaveLot", [l], res => { l.id = res.id || l.id; local.lot(l); }, "บันทึกกลุ่มแล้ว")) { closeModal(); render(); }
+}
+async function saveLotDeath() {
+  const f = S.form, lot = S.lots.find(x => x.id === f.lotId), count = Math.round(num(f.count)), defect = Math.max(0, Math.round(num(f.defect)));
+  if (!lot || !(count > 0) || count > lotRemaining(lot) - lotReserved(lot.id)) { alert("จำนวนตายไม่ถูกต้อง หรือมากกว่าที่เหลือในกลุ่ม"); return; }
+  if (defect > count || defect > lotDefectLeft(lot)) { alert("จำนวนเบิ้ลที่ตายมากกว่าที่มี"); return; }
+  const entry = `${todayISO()} ตาย ${count} ตัว${defect ? ` (เบิ้ล ${defect})` : ""}${f.note ? ": " + f.note : ""}`;
+  if (await save("apiRecordLotDeath", [lot.id, count, f.note, defect], () => local.lot(Object.assign(clone(lot), { dead: num(lot.dead) + count, deadDefect: num(lot.deadDefect) + defect, note: [lot.note, entry].filter(Boolean).join(" · ") })), "บันทึกแล้ว")) { closeModal(); render(); }
+}
+function openLotChange(id, kind) {
+  const l = S.lots.find(x => x.id === id);
+  if (!l) return;
+  if (kind === "death") {
+    S.form = { lotId: id, count: "1", defect: "0", note: "" };
+    openModal(head("Died · " + esc(lotName(l)), `เหลือ ${lotRemaining(l)} ตัว · เบิ้ล ${lotDefectLeft(l)}`)
+      + `<div class="two"><label class="fl"><span>ตายกี่ตัว</span><input class="fld big" data-f="count" inputmode="numeric" value="1"></label><label class="fl"><span>ในนั้นเบิ้ล</span><input class="fld big" data-f="defect" inputmode="numeric" value="0"></label></div>
+         <label class="fl"><span>สาเหตุ <small>(ถ้ามี)</small></span><input class="fld" data-f="note" value="" placeholder="เช่น ตุ่มเหลือง ไม่กิน"></label>
+         <div class="acts"><button class="btn ghost" data-act="close">ยกเลิก</button><button class="btn" data-act="lotDeathSave" data-busy>Save</button></div>`);
+    return;
+  }
+  S.form = { _split: id, id: String(nextNumericId()), kind2: "normal" };
+  renderLotSplit();
+}
+function renderLotSplit() {
+  const f = S.form, l = lotById(f._split), def = lotDefectLeft(l);
+  openModal(head("Give ID · " + esc(lotName(l)), "คัดเก็บ 1 ตัว ตั้งรหัสเข้าทะเบียน")
+    + `<label class="fl"><span>รหัสเต่าใหม่</span><input class="fld big" data-f="id" value="${esc(f.id)}" inputmode="numeric"></label>`
+    + (def ? `<div class="fl"><span>ตัวนี้เป็น</span>${segRow("kind2", ["normal", "defect"], f.kind2)}</div>` : "")
+    + `<div class="hint" style="margin:-4px 0 10px">ตัดออกจากกลุ่ม 1 ตัว (เหลือ ${lotRemaining(l) - 1}) แล้วชั่งน้ำหนักได้ในหน้า Weight</div>
+       <div class="acts"><button class="btn ghost" data-act="close">ยกเลิก</button><button class="btn" data-act="lotSplitSave" data-busy>Give ID</button></div>`);
+}
+async function saveLotSplit() {
+  const f = S.form, lot = lotById(f._split), id = String(f.id || "").trim(), defect = f.kind2 === "defect";
+  if (!lot || !id || idx().byId[id]) { alert(id ? "รหัสนี้มีอยู่แล้ว" : "ใส่รหัสเต่าใหม่"); return; }
+  if (lotAvail(lot) < 1) { alert("กลุ่มนี้ไม่มีตัวเหลือให้แยกแล้ว"); return; }
+  if (defect && lotDefectLeft(lot) < 1) { alert("กลุ่มนี้ไม่มีเบิ้ลเหลือแล้ว"); return; }
+  const turtle = Object.assign(blankTurtle(), { id, sp: lot.sp, zone: lot.zone, src: "ฟักเอง", born: lot.hatchD, lot: lot.id, note: defect ? "กระดองเบิ้ล" : "" });
+  if (await save("apiSplitLot", [lot.id, turtle, defect], () => {
+    local.turtles([turtle]); local.lot(Object.assign(clone(lot), { split: num(lot.split) + 1, splitDefect: num(lot.splitDefect) + (defect ? 1 : 0) }));
+  }, `แยกเป็นรหัส ${id} แล้ว`)) { closeModal(); render(); }
+}
+// Move = ย้ายคอก/เปลี่ยนชื่อเท่านั้น (แก้จำนวนเข้า/ลบกลุ่ม ซ่อนไว้ใต้ "แก้ไขทั้งหมด")
+function openLotMove(id) {
+  const l = lotById(id); if (!l) return;
+  S.form = { _move: id, zone: l.zone, name: l.name || "" };
+  renderLotMove();
+}
+function renderLotMove() {
+  const f = S.form, l = lotById(f._move), zones = S.set.zones.indexOf(l.zone) < 0 && l.zone ? S.set.zones.concat([l.zone]) : S.set.zones;
+  openModal(head("Move · " + esc(lotName(l)), `${lotRemaining(l)} ตัว`)
+    + `<div class="fl"><span>ย้ายไปคอก</span>${chipRow("zone", zones, f.zone, "zones")}</div>
+       <label class="fl"><span>ชื่อกลุ่ม <small>(ว่าง = ${esc(l.sp)} + คอก)</small></span><input class="fld" data-f="name" value="${esc(f.name)}"></label>
+       <div class="acts"><button class="btn ghost" data-act="close">ยกเลิก</button><button class="btn" data-act="lotMoveSave" data-busy>Save</button></div>
+       <div style="margin-top:12px"><button class="lnk" data-act="lotOpen" data-id="${esc(l.id)}">แก้ไขทั้งหมด (จำนวนเข้า วันฟัก ลบกลุ่ม) ▸</button></div>`);
+}
+async function saveLotMove() {
+  const f = S.form, lot = Object.assign(clone(lotById(f._move)), { zone: f.zone, name: String(f.name || "").trim() });
+  if (!lot.zone) { alert("เลือกคอก"); return; }
+  if (await save("apiSaveLot", [lot], () => local.lot(lot), "บันทึกแล้ว")) { closeModal(); render(); }
+}
+function openTask(id, title) {
+  const task = id ? clone(S.tasks.find(x => x.id === id)) : { id: "", title: title || "", dueDate: addDays(todayISO(), 7), repeatDays: 0, note: "", done: false };
+  if (!task) return;
+  S.form = task;
+  renderTask();
+}
+function renderTask() {
+  const t = S.form, isNew = !t.id;
+  // ทำซ้ำ: Once / Monthly / Every 6 months / Yearly / Custom (พิมพ์จำนวนวันเอง)
+  const rep = num(t.repeatDays), custom = !!t._repCustom || !REPEATS.some(r => r[0] === rep);
+  const repBtn = (v, l) => `<button type="button" data-act="fset" data-k="repeatDays" data-v="${v}" aria-pressed="${!custom && rep === v}">${l}</button>`;
+  // Do within: ปุ่มลัดนับจากวันนี้ + ช่องเลือกวันเอง (เลื่อนงานที่ไม่ว่างทำ ก็กดใหม่ได้เลย)
+  const within = WITHIN.map(([n, l]) => `<button type="button" data-act="fset" data-k="dueDate" data-v="${addDays(todayISO(), n)}" aria-pressed="${t.dueDate === addDays(todayISO(), n)}">${l}</button>`).join("");
+  openModal(head(isNew ? "Add task" : "Edit task")
+    + `<label class="fl"><span>ชื่องาน</span><input class="fld" data-f="title" value="${esc(t.title)}" placeholder="เช่น ถ่ายพยาธิ"></label>`
+    + `<div class="fl"><span>Do within <small>· ${t.dueDate ? `ภายใน ${DOW[parseISO(t.dueDate).getDay()]} ${fullDate(t.dueDate)}` : "เลือกวัน"}</small></span><div class="seg" role="group">${within}</div><input class="fld" style="margin-top:6px" type="date" data-f="dueDate" data-live="task" value="${esc(t.dueDate)}" aria-label="ทำให้เสร็จภายใน"></div>`
+    + `<div class="fl"><span>Repeat${rep ? ` <small>· รอบถัดไปนับจากวันที่กดเสร็จ</small>` : ""}</span><div class="seg" role="group">${REPEATS.map(([v, l]) => repBtn(v, l)).join("")}<button type="button" data-act="fset" data-k="_repCustom" data-v="1" aria-pressed="${custom}">Custom</button></div></div>`
+    + (custom ? `<label class="fl"><span>ทุกกี่วัน</span><input class="fld" data-f="repeatDays" inputmode="numeric" value="${esc(num(t.repeatDays) || "")}" placeholder="เช่น 14"></label>` : "")
+    + `<label class="fl"><span>โน้ต (ถ้ามี)</span><input class="fld" data-f="note" value="${esc(t.note)}"></label>
+       <div class="acts">${isNew ? "" : `<button class="btn danger" data-act="taskDelete" data-id="${esc(t.id)}">ลบ</button>`}<button class="btn" data-act="taskSave" data-busy>บันทึก</button></div>`);
+}
+async function saveTask() {
+  const t = clone(S.form); delete t._repCustom;
+  if (!String(t.title || "").trim() || !t.dueDate || num(t.repeatDays) < 0) { alert("ใส่ชื่องาน วันครบกำหนด และรอบทำซ้ำให้ถูกต้อง"); return; }
+  t.repeatDays = Math.round(num(t.repeatDays)); t.done = false;
+  if (await save("apiSaveTask", [t], res => { t.id = res.id || t.id; local.task(t); }, "บันทึกงานแล้ว")) { closeModal(); render(); }
+}
+async function completeTask(id) {
+  const task = S.tasks.find(x => x.id === id);
+  if (!task || !confirm(task.repeatDays ? `ทำ "${task.title}" เสร็จแล้ว?\n\nรอบถัดไป: ภายใน ${fullDate(nextTaskDate(task.repeatDays))} (${repLabel(task.repeatDays)} นับจากวันนี้)` : `ทำ "${task.title}" เสร็จแล้ว?`)) return;
+  if (await save("apiCompleteTask", [id], () => {
+    if (task.repeatDays) task.dueDate = nextTaskDate(task.repeatDays);
+    else task.done = true;
+  }, "ทำเครื่องหมายเสร็จแล้ว")) render();
+}
+
+/* ---------- รายละเอียดเต่า ---------- */
+function openTurtle(id) {
+  const t = idx().byId[id];
+  if (!t) { toast("ไม่พบรหัส " + id + " ในทะเบียน"); return; }
+  const o = info(id), f = flags(t), h = o.h;
+  const cl = t.clutch ? S.clutches.find(c => c.id === t.clutch) : null;
+  const myClutches = S.clutches.filter(c => c.mom === id);
+  const fin = turtleFinance(id), hasFin = fin.purchase || fin.sale || fin.costs;
+  openModal(head(esc(t.id), esc(t.sp)) + `<div style="margin:-4px 0 10px">${statusBadge(t)} ${flagBadges(f, true)}</div>`
+    + `<dl class="kv"><dt>เพศ</dt><dd>${esc(t.sex)}</dd><dt>กลุ่ม</dt><dd>${esc(t.grp)}</dd><dt>โซน/คอก</dt><dd>${esc(t.zone)}</dd>
+       <dt>ที่มา</dt><dd>${esc(t.src)}${cl ? ` · ชุดไข่ ${esc(cl.id)} (แม่ ${esc(cl.mom)})` : t.clutch ? " · ชุดไข่ " + esc(t.clutch) : ""}</dd>
+       ${t.born ? `<dt>${t.src === "ซื้อมา" ? "วันได้มา" : "วันฟัก"}</dt><dd>${thDate(t.born)}${t.src !== "ซื้อมา" ? " · อายุ " + age(t.born) : ""}</dd>` : ""}
+       ${t.status !== ALIVE ? `<dt>${esc(t.status)}</dt><dd>${thDate(t.sDate)}${t.sNote ? " · " + esc(t.sNote) : ""}</dd>` : ""}
+       ${t.docType && t.docType !== "ไม่มี" ? `<dt>เอกสาร</dt><dd>${esc(t.docType)}${t.docNo ? " · " + esc(t.docNo) : ""}</dd>` : ""}
+       ${t.lot ? `<dt>มาจากกลุ่ม</dt><dd>${esc(moneyLotName(t.lot))}</dd>` : ""}
+       ${t.note ? `<dt>โน้ต</dt><dd>${esc(t.note)}</dd>` : ""}
+       ${myClutches.length ? `<dt>วางไข่</dt><dd>${myClutches.length} ชุด · ${myClutches.reduce((s, c) => s + num(c.eggs), 0)} ฟอง</dd>` : ""}</dl>`
+    + (t.status === ALIVE ? `<div class="meta" style="margin:-6px 0 8px">รอบชั่ง ${cycleLabel(cycleOf(t))}${t.weighMode === "yearly" ? " (ตั้งรายตัว)" : S.set.zoneDays[t.zone] ? ` (ตามคอก ${esc(t.zone)})` : " (Auto ตามกลุ่ม)"}${isYearly(t) ? " · ไม่ขึ้นในหน้า Weight ปกติ" : ""}</div>` : "")
+    + (t.watch ? `<div class="card watch"><b class="red">Watch ตั้งแต่ ${thDate(t.watch)} (${f.watch} วัน)</b>${t.wNote ? `<div>${esc(t.wNote)}</div>` : ""}</div>` : "")
+    + (hasFin ? `<div class="card" style="background:var(--bg)"><h3>เงินของตัวนี้</h3><div>ขาย ${baht(fin.sale)} − ซื้อ ${baht(fin.purchase)} − ค่าใช้จ่ายที่ผูก ${baht(fin.costs)} = <b>${baht(fin.sale - fin.purchase - fin.costs)}</b></div>${fin.rows.length ? `<div class="meta">${fin.rows.map(x => `${esc(x.category)} ${baht(num(x.amount) / String(x.turtleId).split(",").filter(Boolean).length)}`).join(" · ")}</div>` : ""}<div class="hint">ยังไม่รวมค่าอาหาร/ค่าแรงที่ใช้ร่วมกันทั้งฟาร์ม</div></div>` : "")
+    + (o.last ? `<div class="card" style="background:var(--bg)"><b>${fmtG(o.last.g)}</b> <span class="meta">${ago(o.since)}</span>${o.per30 != null ? ` · <span class="meta">${fmtDiff(o.per30)}/30 วัน</span>` : ""}${chart(h)}</div>` : `<div class="meta">ยังไม่มีน้ำหนัก</div>`)
+    + (t.status === ALIVE ? `<div style="margin:2px 0 6px"><button class="lnk" data-act="symptom" data-id="${esc(id)}">＋ บันทึกอาการ (ไม่ต้องชั่ง)</button></div>` : "")
+    + histTable(id)
+    + `<div class="acts"><button class="btn ghost" data-act="tEdit" data-id="${esc(id)}">แก้ข้อมูล</button>${t.status === ALIVE
+      ? (t.watch ? `<button class="btn ghost" data-act="unwatch" data-id="${esc(id)}" data-busy>Done (หายแล้ว)</button>` : `<button class="btn ghost" data-act="watch" data-id="${esc(id)}">Watch</button>`)
+        + `<button class="btn ghost" data-act="status" data-id="${esc(id)}">บันทึกตาย</button>`
+      : t.status === RESERVED ? "" : `<button class="btn ghost" data-act="revive" data-id="${esc(id)}" data-busy>คืนเป็นมีชีวิต</button>`}</div>`);
+}
+/** ประวัติใหม่→เก่า: แถวน้ำหนักเทียบกับครั้งที่ชั่งก่อนหน้า · แถวบันทึกอาการแสดงแค่โน้ต */
+function histTable(id) {
+  const rows = logOf(id).slice().reverse();
+  if (!rows.length) return "";
+  return `<table class="h"><tr><th>วันที่</th><th>น้ำหนัก</th><th>เปลี่ยน</th><th>ต่อ 30 วัน</th></tr>${rows.map((w, i) => {
+    const p = w.g ? rows.slice(i + 1).find(x => x.g) : null, dd = p ? daysBetween(p.d, w.d) : 0, diff = p ? w.g - p.g : 0, pct = p ? diff / p.g * 100 : 0;
+    return `<tr class="tap" data-act="wEdit" data-id="${esc(id)}" data-d="${w.d}"><td>${thDate(w.d)}</td><td>${w.g ? fmtG(w.g) : ""}${w.inch ? `${w.g ? " · " : ""}${esc(w.inch)}"` : ""}${!w.g && !w.inch ? `<span class="meta">อาการ</span>` : ""}</td><td>${p ? fmtDiff(diff) : ""}</td><td>${p && dd > 0 ? fmtDiff(diff / dd * 30) : ""}</td></tr>`
+      + (w.note ? `<tr class="note"><td colspan="4">${esc(w.note)}</td></tr>` : "");
+  }).join("")}</table><div class="hint">แตะแถวเพื่อแก้หรือลบ</div>`;
+}
+
+/* ---------- เฝ้าดู / บันทึกอาการ ---------- */
+// อาการเก็บเป็นแถวในแท็บน้ำหนัก (น้ำหนักว่าง) จึงมีวันที่ย้อนดูได้ · ถ้าวันนั้นชั่งไว้แล้ว ต่อท้ายโน้ตเดิม
+function noteEntry(id, d, text) {
+  const s = savedOn(id, d);
+  return { id, g: s ? s.g : "", note: s && s.note ? s.note + " · " + text : text, inch: s ? s.inch || "" : "" };
+}
+function openSymptom(id, startWatch) {
+  S.form = { _sym: id, watch: startWatch, d: todayISO(), note: "" };
+  openModal(head((startWatch ? "เริ่มเฝ้าดู " : "บันทึกอาการ ") + esc(id), esc(idx().byId[id].sp))
+    + dateRow("d", S.form.d)
+    + `<label class="fl"><span>อาการ</span><input class="fld" data-f="note" placeholder="เช่น น้ำมูกใส ไม่กิน ตาบวม อ้าปากหายใจ"></label>
+       ${startWatch ? `<div class="hint" style="margin:-4px 0 8px">ตัวนี้จะอยู่ใน Watch บน Home จนกว่าจะกด Done</div>` : ""}
+       <div class="acts"><button class="btn ghost" data-act="turtle" data-id="${esc(id)}">ยกเลิก</button><button class="btn" data-act="symSave" data-busy>บันทึก</button></div>`);
+}
+async function saveSymptom() {
+  const f = S.form, id = f._sym, text = String(f.note).trim(), t = clone(idx().byId[id]);
+  if (!f.d) { alert("ใส่วันที่"); return; }
+  if (!text && !f.watch) { alert("ใส่อาการ"); return; }
+  const e = [noteEntry(id, f.d, f.watch ? "เริ่มเฝ้าดู" + (text ? ": " + text : "") : text)];
+  if (!(await save("apiSaveWeights", [f.d, e], () => local.weights(f.d, e)))) return;
+  // อาการล่าสุดของตัวที่เฝ้าดูอยู่ = อาการที่โชว์ในกล่อง "ต้องดู"
+  if (f.watch || (t.watch && text)) {
+    Object.assign(t, f.watch ? { watch: f.d, wNote: text } : { wNote: text });
+    if (!(await save("apiSaveTurtles", [[t], false], () => local.turtles([t])))) return;
+  }
+  toast("บันทึกแล้ว"); render(); openTurtle(id);
+}
+async function stopWatch(id, fromHome) {
+  const t = clone(idx().byId[id]), n = daysBetween(t.watch, todayISO()), d = todayISO();
+  if (!confirm(`${id} หายแล้ว เอาออกจาก Watch? (ดูมา ${n} วัน)`)) return;
+  const e = [noteEntry(id, d, `หายแล้ว (เฝ้าดู ${n} วัน)`)];
+  if (!(await save("apiSaveWeights", [d, e], () => local.weights(d, e)))) return;
+  Object.assign(t, { watch: "", wNote: "" });
+  if (await save("apiSaveTurtles", [[t], false], () => local.turtles([t]), "เอาออกจาก Watch แล้ว")) {
+    const inEdit = fromHome && S.form && "_watchAdd" in S.form;
+    closeModal(); render();
+    if (inEdit) openWatchEdit(); else if (!fromHome) openTurtle(id);
+  }
+}
+function chart(h) {
+  if (h.length < 2) return "";
+  const W = 320, H = 120, P = { l: 46, r: 8, t: 8, b: 20 };
+  const xs = h.map(w => parseISO(w.d).getTime()), ys = h.map(w => w.g);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+  // แกนตั้งกว้างอย่างน้อย 20% ของน้ำหนัก: ตัวใหญ่ขึ้นลง 2-3% จะได้ไม่ดูเหมือนดิ่ง
+  const mid = (y0 + y1) / 2, half = Math.max((y1 - y0) * 0.56, mid * 0.1, 1), lo = mid - half, hi = mid + half;
+  const X = x => P.l + (x1 === x0 ? 0.5 : (x - x0) / (x1 - x0)) * (W - P.l - P.r);
+  const Y = y => P.t + (1 - (y - lo) / (hi - lo)) * (H - P.t - P.b);
+  const pts = h.map(w => X(parseISO(w.d).getTime()).toFixed(1) + "," + Y(w.g).toFixed(1));
+  const txt = (x, y, s, a) => `<text x="${x}" y="${y}" font-size="10" fill="#69736A" text-anchor="${a}">${s}</text>`;
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="กราฟน้ำหนัก">
+    <line x1="${P.l}" x2="${W - P.r}" y1="${Y(y1)}" y2="${Y(y1)}" stroke="#E0E5DC"/><line x1="${P.l}" x2="${W - P.r}" y1="${Y(y0)}" y2="${Y(y0)}" stroke="#E0E5DC"/>
+    ${txt(P.l - 6, Y(y1) + 3, fmtG(y1), "end")}${y1 !== y0 ? txt(P.l - 6, Y(y0) + 3, fmtG(y0), "end") : ""}
+    ${txt(P.l, H - 4, thDate(h[0].d), "start")}${txt(W - P.r, H - 4, thDate(h[h.length - 1].d), "end")}
+    <polyline points="${pts.join(" ")}" fill="none" stroke="#2F5D3A" stroke-width="2" stroke-linejoin="round"/>
+    ${pts.map(p => `<circle cx="${p.split(",")[0]}" cy="${p.split(",")[1]}" r="2.6" fill="#2F5D3A"/>`).join("")}</svg>`;
+}
+
+/* ---------- แก้น้ำหนักย้อนหลัง ---------- */
+function openWeightEdit(id, d) {
+  const w = savedOn(id, d); if (!w) return;
+  const u = unitOf(idx().byId[id]);
+  S.form = { id, d, u, inch: w.inch || "" };
+  openModal(head("แก้บันทึก " + esc(id), thDate(d))
+    + `<label class="fl"><span>น้ำหนัก (${u}) · เว้นว่างได้ถ้าเป็นบันทึกอาการ</span><input class="fld" id="weG" inputmode="decimal" value="${esc(toUnit(w.g, u))}"></label>
+       <label class="fl"><span>ขนาด (นิ้ว)</span><input class="fld" id="weI" inputmode="decimal" value="${esc(w.inch || "")}"></label>
+       <label class="fl"><span>โน้ต / อาการ</span><input class="fld" id="weN" value="${esc(w.note)}"></label>
+       <div class="acts"><button class="btn danger" data-act="wEditDel" data-busy>ลบ</button><button class="btn ghost" data-act="turtle" data-id="${esc(id)}">ยกเลิก</button><button class="btn" data-act="wEditSave" data-busy>บันทึก</button></div>`);
+}
+async function saveWeightEdit(del) {
+  const { id, d, u } = S.form, raw = $("#weG").value.trim();
+  const g = del ? "" : fromUnit(raw, u), note = del ? "" : $("#weN").value.trim();
+  if (!del && raw && g === "") { alert("น้ำหนักต้องเป็นตัวเลข"); return; }
+  if (!del && g === "" && !note && !(num($("#weI").value) > 0)) del = true;
+  if (del && !confirm(`ลบบันทึกวันที่ ${thDate(d)} ของ ${id}?`)) return;
+  const r = del ? "" : oddness(idx().byId[id], g, d);
+  if (r && !confirm(`ตัวเลขน่าจะพิมพ์ผิด\n\n${id}: ${fmtG(g)} — ${r}\n\nบันทึกตามนี้ไหม`)) return;
+  const inch = del ? "" : $("#weI").value.trim();
+  const e = [{ id, g: del ? "" : g, note: del ? "" : note, inch }];
+  if (await save("apiSaveWeights", [d, e], () => local.weights(d, e), del ? "ลบแล้ว" : "บันทึกแล้ว")) { render(); openTurtle(id); }
+}
+
+/* ---------- เพิ่ม/แก้เต่า ---------- */
+function blankTurtle() {
+  return { id: "", sp: S.set.species[0], sex: "ไม่ทราบ", grp: "ลูกเต่า", zone: S.set.zones[0], src: "ฟักเอง", clutch: "", born: "", status: ALIVE, sDate: "", sNote: "", note: "", watch: "", wNote: "", docType: "ไม่มี", docNo: "", lot: "", unit: "", weighMode: "" };
+}
+function openTurtleForm(id) {
+  S.form = id ? clone(idx().byId[id]) : blankTurtle();
+  S.form._new = !id;
+  S.form._oldId = id || "";
+  renderTurtleForm();
+}
+function renderTurtleForm() {
+  const t = S.form, isNew = t._new;
+  const sps = S.set.species.indexOf(t.sp) < 0 ? S.set.species.concat([t.sp]) : S.set.species;
+  const zones = S.set.zones.indexOf(t.zone) < 0 ? S.set.zones.concat([t.zone]) : S.set.zones;
+  openModal(head(isNew ? "เพิ่มเต่า" : "แก้ข้อมูล " + esc(t._oldId))
+    + `<label class="fl"><span>รหัส</span><input class="fld" data-f="id" value="${esc(t.id)}" autocomplete="off" inputmode="text"><div class="hint">${isNew
+      ? "ใส่หลายตัวพร้อมกันได้ เช่น 101-120 หรือ 5,7,9 (ข้อมูลด้านล่างใช้เหมือนกันทุกตัว)"
+      : "แก้รหัสได้ ประวัติน้ำหนัก ชุดไข่ และรายการเงินของตัวนี้ย้ายไปรหัสใหม่ด้วย"}</div></label>`
+    + `<div class="fl"><span>สายพันธุ์</span>${chipRow("sp", sps, t.sp, "species")}</div>
+       <div class="fl"><span>โซน/คอก</span>${chipRow("zone", zones, t.zone, "zones")}</div>`
+    + `<div class="fl"><span>เพศ</span>${segRow("sex", SEXES, t.sex)}</div>`
+    + `<div class="fl"><span>กลุ่ม</span>${segRow("grp", GROUPS, t.grp)}</div>`
+    + `<div class="fl"><span>ที่มา</span>${segRow("src", SOURCES, t.src)}</div>`
+    + `<div class="fl"><span>รอบชั่ง <small>· ตามคอกตั้งได้ใน ⚙ · ตัวใหญ่ที่ไม่ชั่งประจำเลือก Yearly</small></span>${segRow("weighMode", ["zone", "yearly"], t.weighMode === "yearly" ? "yearly" : "zone")}</div>`
+    + `<div class="two">${t.src === "ฟักเอง" ? `<label class="fl"><span>ชุดไข่ (ถ้ารู้)</span><select class="fld" data-f="clutch"><option value="">–</option>${S.clutches.slice().sort((a, b) => a.laid < b.laid ? 1 : -1).map(c => `<option value="${esc(c.id)}"${c.id === t.clutch ? " selected" : ""}>${esc(c.id)} · แม่ ${esc(c.mom)}</option>`).join("")}</select></label>` : ""}
+       <label class="fl"><span>${t.src === "ซื้อมา" ? "วันได้มา" : "วันฟัก"}</span><input class="fld" type="date" data-f="born" value="${esc(t.born)}"></label></div>`
+    + `<div class="fl"><span>เอกสาร</span>${segRow("docType", ["ไม่มี", "CITES", "ใบครอบครอง", "อื่นๆ"], t.docType || "ไม่มี")}</div>
+       ${t.docType && t.docType !== "ไม่มี" ? `<label class="fl"><span>เลขที่เอกสาร</span><input class="fld" data-f="docNo" value="${esc(t.docNo)}"></label>` : ""}`
+    + `<label class="fl"><span>มาจากกลุ่ม (ถ้ามี)</span><select class="fld" data-f="lot"><option value="">–</option>${S.lots.map(l => `<option value="${esc(l.id)}"${t.lot === l.id ? " selected" : ""}>${esc(lotName(l))}</option>`).join("")}</select></label>`
+    + `<label class="fl"><span>โน้ต</span><input class="fld" data-f="note" value="${esc(t.note)}"></label>`
+    + `<div class="acts">${isNew ? "" : `<button class="btn danger" data-act="tDel" data-busy>ลบเต่าตัวนี้</button>`}<button class="btn" data-act="tSave" data-busy>บันทึก</button></div>`
+    + (isNew ? "" : `<div class="hint">เต่าที่ตายหรือขาย ใช้ปุ่ม บันทึกตาย / ขายใน Money ดีกว่าลบ ประวัติจะยังอยู่</div>`));
+}
+function parseIds(s) {
+  const out = [];
+  String(s).split(/[,\s]+/).filter(Boolean).forEach(part => {
+    const m = part.match(/^(\d+)-(\d+)$/);
+    if (!m) { out.push(part); return; }
+    const a = +m[1], b = +m[2];
+    if (b < a || b - a > 300) throw new Error("ช่วงรหัสไม่ถูกต้อง: " + part);
+    for (let i = a; i <= b; i++) out.push(m[1].length > 1 && m[1][0] === "0" ? String(i).padStart(m[1].length, "0") : String(i));
+  });
+  return [...new Set(out)];
+}
+async function saveTurtleForm() {
+  const f = S.form, isNew = f._new, oldId = f._oldId, t = clone(f); delete t._new; delete t._oldId;
+  if (t.src !== "ฟักเอง") t.clutch = "";
+  if (t.weighMode !== "yearly") t.weighMode = "";
+  t.id = String(t.id).trim();
+  let list;
+  if (!isNew && t.id !== oldId) {
+    if (!t.id) { alert("ใส่รหัสเต่า"); return; }
+    if (/[,\s]/.test(t.id)) { alert("รหัสห้ามมีช่องว่างหรือจุลภาค"); return; }
+    if (idx().byId[t.id]) { alert("รหัสนี้มีอยู่แล้ว: " + t.id); return; }
+    const n = logOf(oldId).length;
+    if (!confirm(`เปลี่ยนรหัส ${oldId} → ${t.id}?${n ? `\n\nประวัติน้ำหนัก/อาการ ${n} แถว` : ""} ชุดไข่ และรายการเงินของตัวนี้จะย้ายไปรหัสใหม่ด้วย`)) return;
+    if (!(await save("apiRenameTurtle", [oldId, t.id], () => local.renameTurtle(oldId, t.id)))) return;
+  }
+  if (isNew) {
+    let ids;
+    try { ids = parseIds(t.id); } catch (e) { alert(e.message); return; }
+    if (!ids.length) { alert("ใส่รหัสเต่า"); return; }
+    const dup = ids.filter(id => idx().byId[id]);
+    if (dup.length) { alert("รหัสนี้มีอยู่แล้ว: " + dup.join(", ")); return; }
+    if (ids.length > 1 && !confirm(`เพิ่ม ${ids.length} ตัว: ${ids[0]} … ${ids[ids.length - 1]} ตกลงไหม`)) return;
+    list = ids.map(id => Object.assign({}, t, { id }));
+  } else list = [t];
+  if (await save("apiSaveTurtles", [list, isNew], () => local.turtles(list), isNew ? `เพิ่มแล้ว ${list.length} ตัว` : "บันทึกแล้ว")) {
+    closeModal(); render();
+    if (!isNew || list.length === 1) openTurtle(list[0].id);
+  }
+}
+async function deleteTurtle() {
+  const id = S.form._oldId, n = logOf(id).length;
+  const m = S.money.filter(x => String(x.turtleId || "").split(",").map(s => s.trim()).indexOf(id) >= 0).length;
+  if (!confirm(`ลบ ${id} ออกจากทะเบียน${n ? ` พร้อมประวัติน้ำหนัก/อาการ ${n} แถว` : ""}?`
+    + (m ? `\n\nรายการเงิน ${m} รายการยังอยู่ (ยอดเงินไม่เปลี่ยน) แค่ไม่ผูกกับเต่าตัวนี้แล้ว` : "")
+    + `\n\nลบแล้วกู้คืนไม่ได้`)) return;
+  if (await save("apiDeleteTurtle", [id], () => local.delTurtle(id), "ลบแล้ว")) { closeModal(); render(); }
+}
+
+/* ---------- ขาย / ตาย ---------- */
+function openStatus(id) {
+  const t = idx().byId[id];
+  S.form = Object.assign(clone(t), { status: DEAD, sDate: todayISO(), sNote: "" });
+  renderStatus();
+}
+function renderStatus() {
+  const t = S.form;
+  openModal(head("เปลี่ยนสถานะ " + esc(t.id), esc(t.sp))
+    + `<div class="hint" style="margin-bottom:10px">การขายให้บันทึกผ่านแท็บ Money เพื่อให้ยอดเงินตรงกัน</div>
+       ${dateRow("sDate", t.sDate)}
+       <label class="fl"><span>สาเหตุ / อาการ</span><input class="fld" data-f="sNote" value="${esc(t.sNote)}"></label>
+       <div class="acts"><button class="btn ghost" data-act="turtle" data-id="${esc(t.id)}">ยกเลิก</button><button class="btn" data-act="stSave" data-busy>บันทึก</button></div>`);
+}
+async function saveStatus(revive) {
+  // ขาย/ตาย = เลิกเฝ้าดูไปด้วย
+  const t = revive ? Object.assign(clone(idx().byId[revive]), { status: ALIVE, sDate: "", sNote: "" }) : Object.assign(clone(S.form), { watch: "", wNote: "" });
+  delete t._new;
+  if (!revive && !t.sDate) { alert("ใส่วันที่"); return; }
+  if (revive && !confirm(`คืนสถานะ ${t.id} เป็นมีชีวิต?`)) return;
+  if (await save("apiSaveTurtles", [[t], false], () => local.turtles([t]), "บันทึกแล้ว")) { render(); openTurtle(t.id); }
+}
+
+/* ---------- ไข่: ชุดไข่ / เช็กเชื้อ / + Hatched / ปิดชุด ---------- */
+function blankClutch() { return { id: "", mom: "", dad: "", laid: todayISO(), eggs: "", fertile: "", hatchD: "", hatched: "", note: "", fertD: "", split: 0, hatchLast: "", closed: "" }; }
+function openClutch(id, preset) {
+  S.form = id ? Object.assign(blankClutch(), clone(S.clutches.find(c => c.id === id))) : Object.assign(blankClutch(), preset || {});
+  renderClutch();
+}
+function renderClutch() {
+  const c = S.form, isNew = !c.id;
+  const moms = alive().filter(t => t.sex === "เมีย").sort((a, b) => cmpId(a.id, b.id));
+  const dads = alive().filter(t => t.sex === "ผู้").sort((a, b) => cmpId(a.id, b.id));
+  const momT = idx().byId[c.mom];
+  openModal(head(isNew ? "New clutch" : esc(c.id), isNew ? "เจอไข่ จดแม่ วัน จำนวน" : "แก้ข้อมูลชุดไข่")
+    + `<div class="two"><label class="fl"><span>แม่ (รหัส)</span><input class="fld" data-f="mom" list="momList" value="${esc(c.mom)}" autocomplete="off" inputmode="numeric"><div class="hint" id="momHint">${momT ? esc(momT.sp) : ""}</div></label>
+       <label class="fl"><span>พ่อ <small>(ถ้ารู้)</small></span><input class="fld" data-f="dad" list="dadList" value="${esc(c.dad)}" autocomplete="off" inputmode="numeric"></label></div>
+       <datalist id="momList">${moms.map(t => `<option value="${esc(t.id)}">${esc(t.sp)}</option>`).join("")}</datalist>
+       <datalist id="dadList">${dads.map(t => `<option value="${esc(t.id)}">${esc(t.sp)}</option>`).join("")}</datalist>
+       ${dateRow("laid", c.laid, "วันวางไข่")}
+       <label class="fl"><span>จำนวนไข่ (ฟอง)</span><input class="fld big" data-f="eggs" inputmode="numeric" value="${esc(c.eggs)}" placeholder="0"></label>
+       <label class="fl"><span>โน้ต <small>(ถ้ามี)</small></span><input class="fld" data-f="note" value="${esc(c.note)}" placeholder="เช่น ตู้ฟัก 1 อุณหภูมิ 30"></label>`
+    + (!isNew && (c.fertile !== "" || num(c.hatched) > 0) ? `<div class="meta" style="margin-bottom:10px">มีเชื้อ ${c.fertile === "" ? "–" : c.fertile}${c.fertD ? ` (${thDate(c.fertD)})` : ""} · ออกแล้ว ${num(c.hatched)} (เบิ้ล ${num(c.split)})</div>` : "")
+    + (!isNew ? hatchLog(c.id) : "")
+    + `<div class="acts">${isNew ? "" : `<button class="btn danger" data-act="cDel" data-busy>ลบ</button>`}<button class="btn" data-act="cSave" data-busy>Save</button></div>`);
+}
+/** ประวัติ + Hatched ของชุดนี้ · กดผิดลบครั้งล่าสุดได้ (หักยอดชุดไข่และกลุ่มคืน) */
+function hatchLog(cid) {
+  const hs = S.hatch.filter(h => h.clutch === cid);
+  if (!hs.length) return "";
+  return `<div class="card" style="background:var(--bg)"><h3>+ Hatched ${hs.length} ครั้ง</h3>${hs.map(h => `<div class="row"><span class="grow">${thDate(h.d)} · ปกติ ${num(h.n)}${num(h.split) ? ` · <span class="amber">เบิ้ล ${num(h.split)}</span>` : ""}</span><span class="meta">${esc(h.lot ? moneyLotName(h.lot) : "")}</span></div>`).join("")}
+    <div style="margin-top:6px"><button class="lnk" data-act="hatchUndo" data-id="${esc(cid)}" data-busy>ลบครั้งล่าสุด (กดผิด)</button></div></div>`;
+}
+async function undoHatch(cid) {
+  const hs = S.hatch.filter(h => h.clutch === cid), h = hs[hs.length - 1], c = S.clutches.find(x => x.id === cid);
+  if (!h || !c) return;
+  const total = num(h.n) + num(h.split), lot = lotById(h.lot);
+  if (lot && lotAvail(lot) < total) { alert(`กลุ่ม ${lotName(lot)} เหลือ ${lotAvail(lot)} ตัว หักคืน ${total} ตัวไม่ได้ (ขาย/ตายไปแล้ว)`); return; }
+  if (!confirm(`ลบ + Hatched วันที่ ${thDate(h.d)} (ปกติ ${num(h.n)} · เบิ้ล ${num(h.split)})?\nชุด ${cid} และกลุ่ม${lot ? ` ${lotName(lot)}` : ""} จะลดลง ${total} ตัว`)) return;
+  if (await save("apiUndoHatch", [cid], () => {
+    S.hatch.splice(S.hatch.lastIndexOf(h), 1);
+    const rest = S.hatch.filter(x => x.clutch === cid).map(x => x.d).sort();
+    local.clutch(Object.assign(clone(c), { hatched: Math.max(0, num(c.hatched) - total) || "", split: Math.max(0, num(c.split) - num(h.split)), hatchD: rest[0] || "", hatchLast: rest[rest.length - 1] || "" }));
+    if (lot) {
+      const nl = Object.assign(clone(lot), { start: num(lot.start) - total, defect: Math.max(0, num(lot.defect) - num(h.split)) });
+      if (!S.hatch.some(x => x.clutch === cid && x.lot === lot.id)) nl.clutches = String(nl.clutches || "").split(",").map(x => x.trim()).filter(x => x && x !== cid).join(",");
+      local.lot(nl);
+    }
+  }, "ลบแล้ว")) { closeModal(); render(); openClutch(cid); }
+}
+async function reopenClutch(id) {
+  const c = S.clutches.find(x => x.id === id);
+  if (!c || !confirm(`เปิดชุด ${id} ใหม่? (กด + Hatched ต่อได้)`)) return;
+  const nc = Object.assign(blankClutch(), clone(c), { closed: "" });
+  if (await save("apiSaveClutch", [nc], () => local.clutch(nc), "เปิดชุดแล้ว")) render();
+}
+// เตือนไข่บน Home: เจอไข่ = ลงชุดไข่ใหม่ (ใส่แม่ให้แล้ว) · ไม่เจอ = จดโน้ต "เช็กรัง ไม่เจอไข่" แล้วซ่อนเตือน 7 วัน
+async function noEggs(id) {
+  if (!confirm(`เช็กรังแม่ ${id} แล้วไม่เจอไข่? (ซ่อนเตือน ${NEST_HIDE} วัน)`)) return;
+  const d = todayISO(), e = [noteEntry(id, d, NEST_NOTE)];
+  if (await save("apiSaveWeights", [d, e], () => local.weights(d, e), "จดแล้ว")) render();
+}
+async function saveClutch() {
+  const c = clone(S.form);
+  ["mom", "dad", "note"].forEach(k => { c[k] = String(c[k] || "").trim(); });
+  c.eggs = String(c.eggs).trim() === "" ? "" : Math.round(num(c.eggs));
+  if (!c.mom) { alert("ใส่รหัสแม่"); return; }
+  if (!c.laid) { alert("ใส่วันวางไข่"); return; }
+  if (!(c.eggs > 0)) { alert("ใส่จำนวนไข่"); return; }
+  if (num(c.hatched) > c.eggs) { alert(`ออกแล้ว ${num(c.hatched)} ตัว จำนวนไข่ต้องไม่น้อยกว่านี้`); return; }
+  if (!idx().byId[c.mom] && !confirm(`ยังไม่มีรหัสแม่ ${c.mom} ในทะเบียน บันทึกต่อไหม`)) return;
+  const r = await save("apiSaveClutch", [c], res => { c.id = res.id || c.id; local.clutch(c); }, "บันทึกแล้ว");
+  if (r) { if (S.eggYear !== "all") S.eggYear = c.laid.slice(0, 4); closeModal(); render(); }
+}
+async function deleteClutch() {
+  const id = S.form.id;
+  if (hatchLotsOf(id).length && !confirm(`ชุด ${id} มีลูกเข้ากลุ่มแล้ว ลบแล้วตัวเลขในกลุ่มจะไม่ลด ลบไหม`)) return;
+  if (!confirm(`ลบชุดไข่ ${id}?`)) return;
+  if (await save("apiDeleteClutch", [id], () => local.delClutch(id), "ลบแล้ว")) { closeModal(); render(); }
+}
+// เช็กเชื้อ: กดซ้ำได้ ค่าล่าสุดทับ
+function openFertile(id) {
+  const c = S.clutches.find(x => x.id === id);
+  S.form = { _fert: id, d: c.fertD || todayISO(), fertile: c.fertile === "" ? "" : String(c.fertile) };
+  renderFertile();
+}
+function renderFertile() {
+  const f = S.form, c = S.clutches.find(x => x.id === f._fert);
+  openModal(head("Check fertile · " + esc(c.id), `${c.eggs} ฟอง · วาง ${thDate(c.laid)}`)
+    + dateRow("d", f.d, "วันที่เช็ก")
+    + `<label class="fl"><span>มีเชื้อกี่ฟอง</span><input class="fld big" data-f="fertile" inputmode="numeric" value="${esc(f.fertile)}" placeholder="0"></label>
+       <div class="acts"><button class="btn ghost" data-act="close">ยกเลิก</button><button class="btn" data-act="cFertSave" data-busy>Save</button></div>`);
+}
+async function saveFertile() {
+  const f = S.form, c = S.clutches.find(x => x.id === f._fert), v = String(f.fertile).trim();
+  if (!f.d) { alert("ใส่วันที่เช็ก"); return; }
+  if (v === "" || num(v) < 0 || Math.round(num(v)) > num(c.eggs)) { alert(`ใส่จำนวนมีเชื้อ 0–${c.eggs}`); return; }
+  const nc = Object.assign(blankClutch(), clone(c), { fertile: Math.round(num(v)), fertD: f.d });
+  if (await save("apiSaveClutch", [nc], () => local.clutch(nc), "บันทึกแล้ว")) { closeModal(); render(); }
+}
+async function closeClutch(id) {
+  const c = S.clutches.find(x => x.id === id), left = num(c.eggs) - num(c.hatched);
+  if (!confirm(`ปิดชุด ${id}? ${left > 0 ? `ไข่ที่เหลือ ${left} ฟองนับว่าไม่ออก` : "ออกครบแล้ว"}`)) return;
+  const nc = Object.assign(blankClutch(), clone(c), { closed: todayISO() });
+  if (await save("apiSaveClutch", [nc], () => local.clutch(nc), "ปิดชุดแล้ว")) render();
+}
+function nextNumericId() {
+  return S.turtles.reduce((m, t) => /^\d+$/.test(t.id) ? Math.max(m, Number(t.id)) : m, 0) + 1;
+}
+// + Hatched: ลูกออกทยอย กดได้หลายวัน · แยกปกติ/เบิ้ล · เข้ากลุ่มเดิมหรือสร้างใหม่ (ลูกเต่าไม่ตั้งรหัส นับเป็นจำนวน)
+function openHatch(id) {
+  const c = S.clutches.find(x => x.id === id), mom = idx().byId[c.mom], sp = mom ? mom.sp : S.set.species[0];
+  const prev = hatchLotsOf(id).filter(l => S.lots.some(x => x.id === l)), cands = S.lots.filter(l => l.sp === sp);
+  const zones = S.set.zones;
+  S.form = { _hatch: id, d: todayISO(), n: 0, split: 0, lot: prev[0] || (cands[0] ? cands[0].id : "new"), sp, zone: zones.indexOf("บ้าน") >= 0 ? "บ้าน" : zones[0], name: "" };
+  renderHatch();
+}
+function renderHatch() {
+  const f = S.form, c = S.clutches.find(x => x.id === f._hatch), left = num(c.eggs) - num(c.hatched), total = f.n + f.split;
+  const cands = S.lots.filter(l => l.sp === f.sp), target = f.lot !== "new" ? S.lots.find(l => l.id === f.lot) : null;
+  // ตัวเลขตรงกลางพิมพ์เองได้ (วันที่ออกเยอะไม่ต้องกด + ทีละตัว)
+  const stepper = (k, label, amb) => `<div class="step"><span class="${amb ? "amber" : ""}">${label}</span><div class="dq"><button type="button" class="stb" data-act="hatchStep" data-k="${k}" data-v="-1" aria-label="ลด ${label}">−</button><input class="stn" data-hn="${k}" inputmode="numeric" value="${f[k]}" aria-label="${label}"><button type="button" class="stb main${amb ? " amb" : ""}" data-act="hatchStep" data-k="${k}" data-v="1" aria-label="เพิ่ม ${label}">+</button></div></div>`;
+  openModal(head("Hatched · " + esc(c.id), `${esc(f.sp)} · ยังอยู่ในไข่ ${left} ฟอง`)
+    + dateRow("d", f.d)
+    + stepper("n", "ปกติ", false) + stepper("split", "เบิ้ล (กระดองเบิ้ล)", true)
+    + `<label class="fl"><span>Group · เข้ากลุ่มไหน</span><select class="fld" data-f="lot" data-live="hatch">${cands.map(l => `<option value="${esc(l.id)}"${f.lot === l.id ? " selected" : ""}>${esc(lotName(l))} · ${lotRemaining(l)} ตัว</option>`).join("")}<option value="new"${f.lot === "new" ? " selected" : ""}>+ New group</option></select></label>`
+    + (f.lot === "new" ? `<div class="fl"><span>คอกของกลุ่มใหม่</span>${chipRow("zone", S.set.zones, f.zone, "zones")}</div><label class="fl"><span>ชื่อกลุ่ม <small>(ว่าง = ${esc(f.sp)} ${esc(f.zone)})</small></span><input class="fld" data-f="name" value="${esc(f.name)}"></label>` : "")
+    + `<div class="hint" id="hatchHint" style="margin:-4px 0 10px">${hatchHintText()}</div>`
+    + `<div class="acts"><button class="btn ghost" data-act="close">ยกเลิก</button><button class="btn" data-act="hatchSave" data-busy>Save</button></div>`);
+}
+function hatchHintText() {
+  const f = S.form, c = S.clutches.find(x => x.id === f._hatch), total = num(f.n) + num(f.split), target = f.lot !== "new" ? lotById(f.lot) : null;
+  return `${esc(c.id)} จะออกแล้ว ${num(c.hatched) + total} / ${c.eggs} ฟอง${target ? ` · ${esc(lotName(target))} จะมี ${lotRemaining(target) + total} ตัว` : ""}`;
+}
+async function saveHatch() {
+  const f = S.form, c = S.clutches.find(x => x.id === f._hatch), total = f.n + f.split, isNew = f.lot === "new";
+  if (!f.d) { alert("ใส่วันที่"); return; }
+  if (!(total > 0)) { alert("กด + ใส่จำนวนที่ออก"); return; }
+  if (num(c.hatched) + total > num(c.eggs)) { alert(`ออกรวม ${num(c.hatched) + total} ตัว มากกว่าจำนวนไข่ ${c.eggs} ฟอง`); return; }
+  if (isNew && !f.zone) { alert("เลือกคอกของกลุ่มใหม่"); return; }
+  const name = String(f.name || "").trim();
+  const h = { clutch: c.id, d: f.d, n: f.n, split: f.split, lot: isNew ? "" : f.lot, newLot: isNew ? { sp: f.sp, zone: f.zone, name } : null };
+  const r = await save("apiHatch", [h], res => {
+    const nc = Object.assign(blankClutch(), clone(c), { hatched: num(c.hatched) + total, split: num(c.split) + f.split, hatchD: c.hatchD || f.d, hatchLast: f.d });
+    local.clutch(nc);
+    const lotId = res.lot || f.lot;
+    let lot = S.lots.find(l => l.id === lotId);
+    lot = lot ? clone(lot) : { id: lotId, sp: f.sp, hatchD: f.d, clutches: "", start: 0, zone: f.zone, note: "", dead: 0, split: 0, sold: 0, name: name || `${f.sp} ${f.zone}`, defect: 0, deadDefect: 0 };
+    lot.start = num(lot.start) + total; lot.defect = num(lot.defect) + f.split; if (!lot.hatchD) lot.hatchD = f.d;
+    const cl = String(lot.clutches || "").split(",").map(x => x.trim()).filter(Boolean);
+    if (cl.indexOf(c.id) < 0) cl.push(c.id);
+    lot.clutches = cl.join(",");
+    local.lot(lot); local.hatch({ clutch: c.id, d: f.d, n: f.n, split: f.split, lot: lotId });
+  }, `บันทึกแล้ว · ออก ${total} ตัว`);
+  if (r) { closeModal(); render(); }
+}
+
+/* ---------- ตั้งค่า ---------- */
+// รายการที่แก้ได้ในแอป (แทนช่องพิมพ์คั่นด้วย ,): แถวละรายการ · แก้ชื่อ = ข้อมูลเก่าเปลี่ยนชื่อตาม · ▲ เลื่อน · ✕ ลบ · ＋ เพิ่ม
+const LISTS = {
+  zones: { title: "โซน/คอก", hint: "แก้ชื่อ = เต่าและกลุ่มในคอกนั้นย้ายตาม · แถบใต้ชื่อ = รอบชั่งของคอก (Auto = ตามกลุ่ม)", add: "＋ เพิ่มคอก", ph: "ชื่อคอก" },
+  species: { title: "สายพันธุ์", hint: "แก้ชื่อ = เต่าและกลุ่มของพันธุ์นั้นเปลี่ยนชื่อตาม", add: "＋ เพิ่มสายพันธุ์", ph: "ชื่อสายพันธุ์" },
+  moneyCats: { title: "หมวดรายจ่าย", hint: "แก้ชื่อ = รายการเงินเก่าในหมวดนั้นเปลี่ยนชื่อตาม · เรียงตามที่ใช้บ่อย (ปุ่มแรกๆ ในฟอร์ม)", add: "＋ เพิ่มหมวด", ph: "ชื่อหมวด" },
+};
+const RN_FIELDS = { zones: [["turtles", "zone"], ["lots", "zone"]], species: [["turtles", "sp"], ["lots", "sp"]], moneyCats: [["money", "category"]] };
+/** จำนวนข้อมูลที่ใช้ชื่อนี้ · live = นับเฉพาะตัวที่ยังอยู่ (โชว์ในแถว) · ไม่ live = ทุกแถว (ข้อมูลที่จะเปลี่ยนชื่อตาม) */
+function listCount(kind, v, live) {
+  if (!v) return "";
+  if (kind === "moneyCats") { const m = S.money.filter(x => x.category === v).length; return m ? `${m} รายการ` : ""; }
+  const k = kind === "zones" ? "zone" : "sp";
+  const t = (live ? alive() : S.turtles).filter(x => x[k] === v).length, g = S.lots.filter(l => l[k] === v && (!live || lotRemaining(l) > 0)).length;
+  return [t ? `${t} ตัว` : "", g ? `${g} กลุ่ม` : ""].filter(Boolean).join(" · ");
+}
+/** ค่าตั้งค่าทั้งชุดในรูปแบบที่เก็บในชีต (ใช้ตอนเพิ่มรายการจากปุ่ม ＋ New ในฟอร์ม) */
+function rawSettings() {
+  const s = S.set;
+  return { species: s.species.join(","), zones: s.zones.join(","), moneyCats: s.moneyCats.join(","), zoneDays: JSON.stringify(s.zoneDays), dropS: s.dropS, dropM: s.dropM, dropPct: s.dropPct, staleKid: s.staleKid, staleBig: s.staleBig, eggGap: s.eggGap, eggAhead: s.eggAhead };
+}
+function openSettings() {
+  const s = S.set;
+  // คอกที่ลบชื่อออกไปแล้วแต่ยังมีเต่า/กลุ่มอยู่ → บอกไว้ใต้รายการ
+  const orphans = [...new Set(alive().map(t => t.zone).concat(S.lots.filter(l => lotRemaining(l) > 0).map(l => l.zone)))].filter(z => z && s.zones.indexOf(z) < 0);
+  S.form = {
+    lists: { zones: s.zones.map(z => ({ old: z, name: z, days: num(s.zoneDays[z]) })), species: s.species.map(x => ({ old: x, name: x })), moneyCats: s.moneyCats.map(x => ({ old: x, name: x })) },
+    dropS: s.dropS, dropM: s.dropM, dropPct: s.dropPct, staleKid: s.staleKid, staleBig: s.staleBig, eggGap: s.eggGap, eggAhead: s.eggAhead,
+  };
+  const f = S.form, block = kind => `<div class="fl"><span>${LISTS[kind].title} <small>· ${LISTS[kind].hint}</small></span><div id="list-${kind}">${listRowsHtml(kind)}</div><button class="lnk" data-act="listAdd" data-k="${kind}">${LISTS[kind].add}</button>`;
+  openModal(head("ตั้งค่า")
+    + block("zones") + (orphans.length ? `<div class="hint">คอกที่ไม่มีในรายการแต่ยังมีเต่า: ${orphans.map(esc).join(", ")} · แก้ได้ที่ แก้ข้อมูลเต่า หรือ Move ของกลุ่ม</div>` : "") + `</div>`
+    + block("species") + `</div>` + block("moneyCats") + `</div>`
+    + `<div class="card" style="background:var(--bg)"><h3>เกณฑ์แจ้งเตือน</h3><div class="hint" style="margin:-4px 0 8px">ค่าตั้งต้นจากที่ Korn เล่า + ผมตั้งเอง ไม่ได้มาจากแหล่งอ้างอิง ปรับตามที่เห็นจริงในฟาร์ม</div>
+       <div class="fl" style="margin-bottom:4px"><span>น้ำหนักลด (%) <small>· เตือนเมื่อต่ำกว่าสูงสุดใน 30 วันเกินนี้ 2 รอบติด</small></span></div>
+       <div class="three"><label class="fl"><span><small>ต่ำกว่า 100 g</small></span><input class="fld" data-f="dropS" inputmode="decimal" value="${esc(f.dropS)}"></label>
+       <label class="fl"><span><small>100 g – 1 kg</small></span><input class="fld" data-f="dropM" inputmode="decimal" value="${esc(f.dropM)}"></label>
+       <label class="fl"><span><small>1 kg ขึ้นไป</small></span><input class="fld" data-f="dropPct" inputmode="decimal" value="${esc(f.dropPct)}"></label></div>
+       <div class="fl" style="margin-bottom:4px"><span>รอบชั่ง Auto (วัน) <small>· คอกที่เลือก Auto</small></span></div>
+       <div class="two"><label class="fl"><span><small>ลูกเต่า</small></span><input class="fld" data-f="staleKid" inputmode="numeric" value="${esc(f.staleKid)}"></label>
+       <label class="fl"><span><small>ตัวกลาง/พ่อแม่พันธุ์</small></span><input class="fld" data-f="staleBig" inputmode="numeric" value="${esc(f.staleBig)}"></label></div>
+       <div class="two"><label class="fl"><span>Eggs due: วางล่าสุดครบกี่วันให้เช็กรัง</span><input class="fld" data-f="eggGap" inputmode="numeric" value="${esc(f.eggGap)}"></label>
+       <label class="fl" style="margin:0"><span>Egg season: เตือนก่อนวันวางแรกของปีก่อนกี่วัน</span><input class="fld" data-f="eggAhead" inputmode="numeric" value="${esc(f.eggAhead)}"></label></div></div>`
+    + `<div class="acts"><button class="btn" data-act="setSave" data-busy>บันทึก</button></div>`
+    + `<div class="meta" style="margin-top:14px">${S.sheetUrl ? `<a href="${esc(S.sheetUrl)}" target="_blank" rel="noopener">เปิด Google Sheet</a> · ` : ""}${S.mode === "demo" ? "โหมดตัวอย่าง (ยังไม่ได้ตั้ง TURTLE_API ใน config.js)" : `<button class="lnk" data-act="forgetPin">ล้างรหัสในเครื่องนี้</button>`}</div>`);
+}
+function listRowsHtml(kind) {
+  return S.form.lists[kind].map((r, i) => {
+    // รอบชั่งของคอก: ปุ่มเลือก (ค่าที่ไม่อยู่ในปุ่ม เช่น 21 วันจากชีต โชว์เป็นปุ่มเพิ่ม)
+    const cyc = kind !== "zones" ? "" : `<div class="seg cyc" role="group" aria-label="รอบชั่ง ${esc(r.name)}">${CYCLES.concat(CYCLES.some(c => c[0] === num(r.days)) ? [] : [[num(r.days), `${num(r.days)} days`]]).map(([d, l]) => `<button type="button" data-act="zoneCycle" data-i="${i}" data-v="${d}" aria-pressed="${num(r.days) === d}">${l}</button>`).join("")}</div>`;
+    return `<div class="lrow"><div class="zrow"><input class="fld" data-li="${kind}:${i}" value="${esc(r.name)}" placeholder="${LISTS[kind].ph}" autocomplete="off" aria-label="${LISTS[kind].ph} ${i + 1}">
+      <span class="meta">${esc(listCount(kind, r.old, true))}</span>
+      <button class="okb" data-act="listUp" data-k="${kind}" data-i="${i}" aria-label="เลื่อนขึ้น"${i ? "" : " disabled"}>▲</button>
+      <button class="okb" data-act="listDel" data-k="${kind}" data-i="${i}" aria-label="ลบ">✕</button></div>${cyc}</div>`;
+  }).join("");
+}
+function redrawList(kind, focus) {
+  $("#list-" + kind).innerHTML = listRowsHtml(kind);
+  if (focus != null) { const el = document.querySelector(`[data-li="${kind}:${focus}"]`); if (el) el.focus(); }
+}
+async function saveSettings() {
+  const f = S.form, lists = {}, renames = {}, msgs = [];
+  for (const kind of Object.keys(LISTS)) {
+    const L = LISTS[kind], rows = f.lists[kind].map(r => Object.assign({}, r, { name: String(r.name).trim() })).filter(r => r.name), names = rows.map(r => r.name);
+    if (!names.length) { alert(`ต้องมี${L.title}อย่างน้อย 1 รายการ`); return; }
+    if (names.some(n => n.indexOf(",") >= 0)) { alert(`ชื่อ${L.title}ห้ามมีจุลภาค ( , )`); return; }
+    const dup = names.filter((n, i) => names.indexOf(n) !== i);
+    if (dup.length) { alert(`${L.title}ซ้ำ: ${[...new Set(dup)].join(", ")}`); return; }
+    lists[kind] = rows;
+    // แก้ชื่อแถวเดิมที่มีข้อมูลใช้อยู่ = เปลี่ยนชื่อในข้อมูลเก่าด้วย (หลังบ้านแก้ทีเดียวพร้อมตั้งค่า)
+    const rn = rows.filter(r => r.old && r.name !== r.old && listCount(kind, r.old)).map(r => [r.old, r.name]);
+    if (rn.length) renames[kind] = rn;
+    rn.forEach(([a, b]) => msgs.push(`${L.title}: "${a}" → "${b}" (${listCount(kind, a)})`));
+  }
+  const zoneDays = {};
+  lists.zones.forEach(r => { if (num(r.days) > 0) zoneDays[r.name] = num(r.days); });
+  const obj = { species: lists.species.map(r => r.name).join(","), zones: lists.zones.map(r => r.name).join(","), moneyCats: lists.moneyCats.map(r => r.name).join(","), zoneDays: JSON.stringify(zoneDays),
+    dropS: num(f.dropS), dropM: num(f.dropM), dropPct: num(f.dropPct), staleKid: num(f.staleKid), staleBig: num(f.staleBig), eggGap: num(f.eggGap), eggAhead: num(f.eggAhead) };
+  if (!["dropS", "dropM", "dropPct", "staleKid", "staleBig", "eggGap", "eggAhead"].every(k => obj[k] > 0)) { alert("เกณฑ์ต้องเป็นตัวเลขมากกว่า 0"); return; }
+  if (msgs.length && !confirm("เปลี่ยนชื่อ (ข้อมูลเก่าเปลี่ยนตามด้วย)\n\n" + msgs.join("\n") + "\n\nตกลงไหม")) return;
+  if (await save("apiSaveSettings", [obj, renames], () => { local.renameValues(renames); S.set = normSet(obj); changed(); }, "บันทึกแล้ว")) {
+    (renames.zones || []).forEach(([a, b]) => { if (S.zone === a) S.zone = b; });
+    (renames.species || []).forEach(([a, b]) => { if (S.sp === a) S.sp = b; });
+    closeModal(); render();
+  }
+}
+/** ปุ่ม ＋ New ท้ายปุ่มเลือกในฟอร์ม: เพิ่มชื่อใหม่ลงตั้งค่าแล้วเลือกให้เลย (ไม่ต้องเข้า ⚙) */
+async function addListItem(kind, k) {
+  const name = String(prompt(LISTS[kind].ph + "ใหม่") || "").trim();
+  if (!name) return;
+  if (name.indexOf(",") >= 0) { alert("ชื่อห้ามมีจุลภาค ( , )"); return; }
+  if (S.set[kind].indexOf(name) < 0) {
+    const obj = rawSettings(); obj[kind] = S.set[kind].concat([name]).join(",");
+    if (!(await save("apiSaveSettings", [{ [kind]: obj[kind] }, {}], () => { S.set = normSet(obj); }, "เพิ่ม " + name + " แล้ว"))) return;
+  }
+  ACT.fset({ dataset: { k, v: name } });
+}
+
+/* ================= ปุ่มและการกรอก ================= */
+const ACT = {
+  tab: b => { S.tab = b.dataset.t; lsSet(LS.tab, S.tab); render(); window.scrollTo(0, 0); },
+  reload: () => load(),
+  settings: openSettings,
+  close: closeModal,
+  zone: b => { S.zone = b.dataset.z; render(); },
+  yearly: () => { S.showYearly = !S.showYearly; render(); },
+  watch: b => openSymptom(b.dataset.id, true),
+  symptom: b => openSymptom(b.dataset.id, false),
+  symSave: saveSymptom,
+  unwatch: b => stopWatch(b.dataset.id, !!b.dataset.home),
+  watchEdit: openWatchEdit,
+  watchAddGo: () => {
+    const id = String(S.form && S.form._watchAdd || "").trim();
+    if (!idx().byId[id]) { alert("ไม่พบรหัส " + (id || "(ว่าง)") + " ในทะเบียน"); return; }
+    if (idx().byId[id].watch) { alert(id + " อยู่ใน Watch แล้ว"); return; }
+    openSymptom(id, true);
+  },
+  note: b => { const id = b.dataset.id; S.noteOpen[id] = !S.noteOpen[id]; render(); },
+  sym: b => {
+    const id = b.dataset.id, D = ensureDraft(), cur = draftSym(id).sym.slice(), i = cur.indexOf(b.dataset.v);
+    if (i >= 0) cur.splice(i, 1); else cur.push(b.dataset.v);
+    D.s[id] = SYMPTOMS.filter(x => cur.indexOf(x) >= 0);
+    D.w[id] = D.s[id].length > 0;
+    touchDraft(); render();
+  },
+  wMode: b => { S.wMode = b.dataset.v; render(); },
+  goWeights: b => { S.tab = "turtles"; S.turtleView = "weights"; if (b && b.dataset.z) S.zone = b.dataset.z; lsSet(LS.tab, S.tab); render(); window.scrollTo(0, 0); },
+  goYearly: b => { S.tab = "weigh"; S.zone = b.dataset.z || "ทั้งหมด"; S.showYearly = true; lsSet(LS.tab, S.tab); render(); window.scrollTo(0, 0); },
+  watchAll: () => { S.watchAll = true; render(); },
+  eggFound: b => openClutch(null, { mom: b.dataset.id }),
+  noEggs: b => noEggs(b.dataset.id),
+  cReopen: b => reopenClutch(b.dataset.id),
+  hatchUndo: b => undoHatch(b.dataset.id),
+  lotMove: b => openLotMove(b.dataset.id),
+  lotMoveSave: saveLotMove,
+  moneyEdit: b => openMoneyEdit(b.dataset.id),
+  moneyDel: deleteMoney,
+  moneyAll: () => { S.moneyAll = true; render(); },
+  goZoneWeigh: b => { S.tab = "weigh"; S.zone = b.dataset.z || "ทั้งหมด"; lsSet(LS.tab, S.tab); render(); window.scrollTo(0, 0); },
+  tasksOpen: openTasks,
+  wSave: saveWeights,
+  wClear: () => { if (confirm("ล้างตัวเลขที่ยังไม่บันทึกทั้งหมด?")) { S.draft = null; S.noteOpen = {}; lsSet(LS.draft, null); render(); } },
+  turtle: b => openTurtle(b.dataset.id),
+  wEdit: b => openWeightEdit(b.dataset.id, b.dataset.d),
+  wEditSave: () => saveWeightEdit(false),
+  wEditDel: () => saveWeightEdit(true),
+  tAdd: () => openTurtleForm(null),
+  tEdit: b => openTurtleForm(b.dataset.id),
+  tSave: saveTurtleForm,
+  tDel: deleteTurtle,
+  unit: b => {
+    const t = idx().byId[b.dataset.id];
+    if (!t) return;
+    S.unit[t.id] = unitOf(t) === "kg" ? "g" : "kg";
+    render();
+  },
+  fset: b => {
+    S.form[b.dataset.k] = b.dataset.v;
+    if (S.form._hatch) renderHatch();
+    else if (S.form._fert) renderFertile();
+    else if (S.form._split) renderLotSplit();
+    else if (S.form._move) renderLotMove();
+    else if (S.form._lotNew !== undefined) renderLot();
+    else if (S.form.kind) renderMoneyForm();
+    else if ("dueDate" in S.form) { if (b.dataset.k === "repeatDays") S.form._repCustom = ""; renderTask(); }
+    else if ("eggs" in S.form) renderClutch();
+    else if (b.dataset.k === "status" || b.dataset.k === "sDate") renderStatus();
+    else if (S.form._sym) { const el = document.querySelector('[data-f="d"]'); if (el) el.value = S.form.d; document.querySelectorAll('[data-k="d"]').forEach(x => x.setAttribute("aria-pressed", x.dataset.v === S.form.d)); }
+    else if (S.form.amounts) { const el = document.querySelector('[data-f="date"]'); if (el) el.value = S.form.date; document.querySelectorAll('[data-k="date"]').forEach(x => x.setAttribute("aria-pressed", x.dataset.v === S.form.date)); }
+    else renderTurtleForm();
+  },
+  status: b => openStatus(b.dataset.id),
+  stSave: () => saveStatus(null),
+  revive: b => saveStatus(b.dataset.id),
+  st: b => { S.st = b.dataset.v; S.sp = "ทั้งหมด"; render(); },
+  sp: b => { S.sp = b.dataset.v; render(); },
+  eggYear: b => { S.eggYear = b.dataset.v; render(); },
+  turtleView: b => { S.turtleView = b.dataset.v; render(); },
+  cAdd: () => openClutch(null),
+  cOpen: b => openClutch(b.dataset.id),
+  cSave: saveClutch,
+  cDel: deleteClutch,
+  cFert: b => openFertile(b.dataset.id),
+  cFertSave: saveFertile,
+  cClose: b => closeClutch(b.dataset.id),
+  byMother: openByMother,
+  hatch: b => openHatch(b.dataset.id),
+  hatchStep: b => { const k = b.dataset.k; S.form[k] = Math.max(0, num(S.form[k]) + Number(b.dataset.v)); renderHatch(); },
+  hatchSave: saveHatch,
+  lotSell: b => openMoney("sale", { target: "lot", lotId: b.dataset.id }),
+  goTurtleWeigh: b => { S.tab = "weigh"; S.zone = idx().byId[b.dataset.id].zone || "ทั้งหมด"; lsSet(LS.tab, S.tab); render(); },
+  moneyOpen: b => openMoney(b.dataset.kind, b.dataset.cat ? { category: b.dataset.cat } : null),
+  moneySave: saveMoneyForm,
+  saleComplete: b => openCompleteSale(b.dataset.id),
+  saleCompleteSave: saveCompleteSale,
+  recurringExpense: openRecurringExpenses,
+  recurringSave: saveRecurringExpenses,
+  lotAdd: () => openLot(null),
+  lotOpen: b => openLot(b.dataset.id),
+  lotSave: saveLotForm,
+  lotDeath: b => openLotChange(b.dataset.id, "death"),
+  lotDeathSave: saveLotDeath,
+  lotSplit: b => openLotChange(b.dataset.id, "split"),
+  lotSplitSave: saveLotSplit,
+  lotDelete: async b => {
+    const l = S.lots.find(x => x.id === b.dataset.id);
+    if (!l) return;
+    if (num(l.start) !== num(l.dead) + num(l.split) + lotSold(l.id) || lotReserved(l.id)) { alert("ลบไม่ได้เพราะกลุ่มยังมีตัวเหลือหรือมีมัดจำค้าง"); return; }
+    if (S.money.some(x => x.lotId === l.id) || S.turtles.some(t => t.lot === l.id)) { alert("ลบกลุ่มไม่ได้เพราะมีประวัติซื้อขายหรือเต่าที่แยกจากกลุ่มแล้ว"); return; }
+    if (!confirm(`ลบกลุ่ม ${l.id}?`)) return;
+    if (await save("apiDeleteLot", [l.id], () => local.delLot(l.id), "ลบกลุ่มแล้ว")) { closeModal(); render(); }
+  },
+  taskAdd: () => openTask(null),
+  taskTemplate: b => openTask(null, b.dataset.v),
+  taskEdit: b => openTask(b.dataset.id),
+  taskSave: saveTask,
+  taskDone: b => { const inModal = !!b.closest("#modal"); completeTask(b.dataset.id).then(() => { if (inModal && !$("#modal").hidden) openTasks(); }); },
+  taskDelete: async b => {
+    if (!confirm("ลบงานนี้?")) return;
+    if (await save("apiDeleteTask", [b.dataset.id], () => local.delTask(b.dataset.id), "ลบงานแล้ว")) { closeModal(); render(); }
+  },
+  setSave: saveSettings,
+  listAdd: b => { const k = b.dataset.k, r = S.form.lists[k]; r.push({ old: "", name: "", days: 0 }); redrawList(k, r.length - 1); },
+  listUp: b => { const k = b.dataset.k, i = Number(b.dataset.i), r = S.form.lists[k]; if (i > 0) { [r[i - 1], r[i]] = [r[i], r[i - 1]]; redrawList(k); } },
+  listDel: b => {
+    const k = b.dataset.k, i = Number(b.dataset.i), r = S.form.lists[k][i], c = listCount(k, r.old, k !== "moneyCats");
+    if (c && !confirm(`"${r.old}" ยังมี ${c}\n\nลบชื่อออกจากรายการแล้ว ข้อมูลเดิมยังใช้ชื่อนี้อยู่${k === "zones" ? " (ย้ายได้ที่ แก้ข้อมูลเต่า หรือ Move ของกลุ่ม)" : ""} ลบไหม`)) return;
+    S.form.lists[k].splice(i, 1); redrawList(k);
+  },
+  zoneCycle: b => { S.form.lists.zones[Number(b.dataset.i)].days = Number(b.dataset.v); redrawList("zones"); },
+  listNew: b => addListItem(b.dataset.kind, b.dataset.k),
+  forgetPin: () => { if (confirm("ล้างรหัสที่เครื่องนี้จำไว้?")) { lsSet(LS.pin, null); S.pin = ""; closeModal(); S.needPin = true; render(); } },
+  pinGo: () => { S.pin = $("#pinInput").value.trim(); lsSet(LS.pin, S.pin); S.pinTried = true; S.needPin = false; render(); load(); },
+};
+document.addEventListener("click", e => {
+  if (e.target.id === "modal") { closeModal(); return; }
+  // ช่องวันที่โปร่งใสหน้า Weight: เบราว์เซอร์คอมพ์ต้องสั่งเปิดปฏิทินเอง (iPhone เปิดเองอยู่แล้ว)
+  if (e.target.id === "wDate" && e.target.showPicker) { try { e.target.showPicker(); } catch (err) { /* บางเบราว์เซอร์ไม่ให้ */ } }
+  const b = e.target.closest("[data-act]");
+  if (b && ACT[b.dataset.act] && !b.disabled) ACT[b.dataset.act](b, e);
+});
+document.addEventListener("input", e => {
+  const el = e.target;
+  if (el.dataset.w !== undefined) onWeightInput(el);
+  else if (el.dataset.i !== undefined) onInchInput(el);
+  else if (el.dataset.n !== undefined) { ensureDraft().n[el.dataset.n] = el.value; touchDraft(); }
+  else if (el.dataset.li && S.form && S.form.lists) { const [k, i] = el.dataset.li.split(":"); S.form.lists[k][Number(i)].name = el.value; }
+  else if (el.dataset.f && S.form) {
+    S.form[el.dataset.f] = el.value;
+    if (el.dataset.f === "mom" && $("#momHint")) { const t = idx().byId[el.value.trim()]; $("#momHint").textContent = t ? t.sp : el.value.trim() ? "ไม่พบในทะเบียน" : ""; }
+    // ขายจากกลุ่ม: จำนวน × ราคา/ตัว = รวม (คิดให้ทันทีที่พิมพ์)
+    if (S.form.kind === "sale" && /^(n|dq|price)$/.test(el.dataset.f)) {
+      const q = Math.max(0, Math.round(num(S.form.n))) + Math.max(0, Math.round(num(S.form.dq)));
+      if (num(S.form.price) > 0 && q) { S.form.total = String(Math.round(q * num(S.form.price) * 100) / 100); const t = document.querySelector('[data-f="total"]'); if (t) t.value = S.form.total; }
+      const c = $("#saleCalc"); if (c) c.textContent = saleCalcText();
+    }
+  } else if (el.dataset.hn && S.form && S.form._hatch) {
+    S.form[el.dataset.hn] = Math.max(0, Math.round(num(el.value)));
+    const h = $("#hatchHint"); if (h) h.innerHTML = hatchHintText();
+  } else if (el.id === "q") { S.q = el.value; $("#tlist").innerHTML = tList(); }
+  else if (el.dataset.batch !== undefined && S.form && S.form.amounts) S.form.amounts[Number(el.dataset.batch)] = el.value;
+});
+document.addEventListener("change", e => {
+  const el = e.target;
+  if (el.dataset.f && S.form) {
+    S.form[el.dataset.f] = el.value;
+    if (el.dataset.live === "money") renderMoneyForm();
+    if (el.dataset.live === "hatch") renderHatch();
+    if (el.dataset.live === "task") renderTask();
+    if (el.dataset.f === "saleStatus" && S.form.kind === "sale" && S.form.saleStatus === "paid") S.form.amount = S.form.total;
+    if (el.dataset.f === "category" && S.form.recurring) {
+      S.form.amount = String(previousCategoryTotal(S.form.category) || "");
+      const amount = document.querySelector('[data-f="amount"]');
+      if (amount) amount.value = S.form.amount;
+    }
+  }
+  if (el.id === "wDate") {
+    const n = new Set(pending().map(x => x.id).concat(watchPending())).size;
+    if (n && !confirm(`มีน้ำหนักที่ยังไม่บันทึก ${n} ตัว เปลี่ยนวันแล้วตัวเลขชุดนี้จะหาย ตกลงไหม`)) { el.value = S.wDate; return; }
+    S.wDate = el.value || todayISO(); S.draft = null; S.noteOpen = {}; lsSet(LS.draft, null); render();
+  }
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && !$("#modal").hidden) { closeModal(); return; }
+  if (e.key === "Enter" && e.target.classList && e.target.classList.contains("win")) {
+    e.preventDefault();
+    const all = [...document.querySelectorAll(".win")], i = all.indexOf(e.target);
+    if (all[i + 1]) { all[i + 1].focus(); all[i + 1].select(); } else e.target.blur();
+  }
+  if (e.key === "Enter" && e.target.id === "pinInput") ACT.pinGo();
+});
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") checkRev(); });
+window.addEventListener("beforeunload", e => { if (pending().length) { e.preventDefault(); e.returnValue = ""; } });
+
+let toastT = null;
+function toast(msg) {
+  const t = $("#toast"); t.textContent = msg; t.hidden = false;
+  clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 2200);
+}
+
+/* ================= โหมดตัวอย่าง (เปิดไฟล์ในเครื่อง / ยังไม่ได้ตั้ง TURTLE_API) ================= */
+function demoData() {
+  let seed = 7;
+  const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+  const today = todayISO(), back = n => { const d = parseISO(today); d.setDate(d.getDate() - n); return iso(d); };
+  const turtles = [], weights = [];
+  const T = (id, sp, sex, grp, zone, extra) => turtles.push(Object.assign({ id: String(id), sp, sex, grp, zone, src: "ซื้อมา", clutch: "", born: back(900), status: ALIVE, sDate: "", sNote: "", note: "", watch: "", wNote: "", weighMode: "" }, extra || {}));
+  [["Leopard", 1, 8, 11000, "คอกเสือดาว"], ["Sulcata", 9, 14, 32000, "คอกซูคาต้า"], ["Indian Star", 15, 18, 1900, "คอกสตาร์"], ["Burmese Star", 19, 21, 3200, "คอกสตาร์"], ["Aldabra", 22, 23, 75000, "คอกอัลดาบร้า"]]
+    .forEach(([sp, a, b, base, zone]) => {
+      for (let id = a; id <= b; id++) {
+        // พ่อแม่พันธุ์ซูคาต้าหนักเกินตาชั่ง = ตั้งชั่งปีละครั้ง (เหมือนของจริง)
+        T(id, sp, id % 3 === 0 ? "ผู้" : "เมีย", "พ่อแม่พันธุ์", zone, sp === "Sulcata" && id <= 12 ? { weighMode: "yearly" } : null);
+        let g = base * (0.8 + rnd() * 0.4);
+        const lastGap = id === 22 || id === 23 ? 26 : 9;
+        for (let d = lastGap + 7 * 14; d >= lastGap; d -= 14) {
+          g *= 1 + (rnd() - 0.42) * 0.02;
+          if (id === 3 && d <= lastGap + 14) g *= 0.94;
+          if (id === 5 && d <= lastGap + 14) g *= 0.965;
+          weights.push({ d: back(d), id: String(id), g: Math.round(g), note: id === 3 && d === lastGap ? "ไม่ค่อยกิน มีน้ำมูกใส" : "" });
+        }
+      }
+    });
+  T(24, "Albino Sulcata", "ไม่ทราบ", "ตัวกลาง", "คอกซูคาต้า"); T(25, "Albino Sulcata", "ไม่ทราบ", "ตัวกลาง", "คอกซูคาต้า");
+  ["24", "25"].forEach((id, k) => { let g = 1400 + k * 200; for (let d = 98; d >= 9; d -= 14) { g += 35 + rnd() * 25; weights.push({ d: back(d), id, g: Math.round(g), note: "" }); } });
+  Object.assign(turtles.find(t => t.id === "7"), { status: DEAD, sDate: back(20), sNote: "มูกปาก/จมูก" });
+  for (let i = weights.length - 1; i >= 0; i--) if (weights[i].id === "7" && weights[i].d > back(20)) weights.splice(i, 1);
+  Object.assign(turtles.find(t => t.id === "12"), { watch: back(3), wNote: "น้ำมูกใส หายใจมีเสียง" });
+  weights.push({ d: back(3), id: "12", g: "", note: "เริ่มเฝ้าดู: น้ำมูกใส หายใจมีเสียง" });
+  const clutches = [
+    { id: "C001", mom: "2", dad: "3", laid: back(170), eggs: 8, fertile: 7, hatchD: back(70), hatched: 6, note: "", fertD: back(150), split: 0, hatchLast: back(62), closed: back(50) },
+    { id: "C002", mom: "10", dad: "9", laid: back(150), eggs: 18, fertile: 15, hatchD: back(66), hatched: 14, note: "", fertD: back(130), split: 2, hatchLast: back(52), closed: back(40) },
+    // C005 กำลังออกทยอย → ปุ่ม + Hatched เข้ากลุ่ม Sulcata อนุบาล
+    { id: "C005", mom: "11", dad: "9", laid: back(110), eggs: 28, fertile: 19, hatchD: back(14), hatched: 11, note: "", fertD: back(92), split: 2, hatchLast: back(2), closed: "" },
+    { id: "C003", mom: "4", dad: "", laid: back(21), eggs: 7, fertile: "", hatchD: "", hatched: "", note: "ตู้ฟัก 1", fertD: "", split: 0, hatchLast: "", closed: "" },
+    { id: "C004", mom: "16", dad: "15", laid: back(33), eggs: 3, fertile: 2, hatchD: "", hatched: "", note: "", fertD: back(14), split: 0, hatchLast: "", closed: "" },
+    // ปีก่อน แม่ 17 วางครั้งแรกวันนี้+4 → Home เตือน "Egg season อีก 4 วัน"
+    { id: "C000", mom: "17", dad: "", laid: back(361), eggs: 4, fertile: 2, hatchD: back(240), hatched: 2, note: "", fertD: back(340), split: 0, hatchLast: back(238), closed: back(230) },
+  ];
+  const lots = [
+    { id: "G001", sp: "Sulcata", hatchD: back(66), clutches: "C002,C005", start: 25, zone: "บ้าน", note: "", dead: 1, split: 2, sold: 0, name: "Sulcata อนุบาล 1", defect: 4, deadDefect: 1, splitDefect: 0 },
+  ];
+  const hatch = [
+    { clutch: "C002", d: back(66), n: 9, split: 1, lot: "G001" }, { clutch: "C002", d: back(52), n: 3, split: 1, lot: "G001" },
+    { clutch: "C005", d: back(14), n: 5, split: 1, lot: "G001" }, { clutch: "C005", d: back(2), n: 4, split: 1, lot: "G001" },
+  ];
+  const money = [
+    { id: "M00001", date: back(4), direction: "จ่าย", category: "ค่าแรงประจำ", amount: 4000, turtleId: "", lotId: "", quantity: 0, total: 0 },
+    { id: "M00002", date: back(3), direction: "จ่าย", category: "ผัก", amount: 1450, turtleId: "", lotId: "", quantity: 0, total: 0 },
+    { id: "M00004", date: back(3), direction: "จ่าย", category: "ค่าส่งผัก", amount: 150, turtleId: "", lotId: "", quantity: 0, total: 0 },
+    { id: "M00003", date: back(2), direction: "รับ", category: "ขายเต่า", amount: 200, turtleId: "", lotId: "G001", quantity: 1, total: 200, saleStatus: "paid", defectQty: 0 },
+  ];
+  const tasks = [
+    { id: "T00001", title: "เปลี่ยนหลอด UVB", dueDate: back(2), repeatDays: 182, note: "คอกลูกเต่า", done: false },
+    { id: "T00002", title: "เก็บไข่", dueDate: back(-3), repeatDays: 0, note: "", done: false },
+    { id: "T00003", title: "ถ่ายพยาธิ", dueDate: back(-40), repeatDays: 365, note: "ทุกคอก", done: false },
+  ];
+  for (let id = 101; id <= 112; id++) {
+    const leo = id <= 106, cl = leo ? clutches[0] : clutches[1];
+    T(id, leo ? "Leopard" : "Sulcata", "ไม่ทราบ", "ลูกเต่า", "บ้าน", { src: "ฟักเอง", clutch: cl.id, born: cl.hatchD });
+    let g = leo ? 38 + rnd() * 8 : 32 + rnd() * 6;
+    for (let d = 60; d >= 1; d -= 5) {
+      const stuck = id === 105 && d <= 16;
+      g += stuck ? -0.5 : (leo ? 0.9 : 1.6) * 5 * (0.7 + rnd() * 0.6);
+      weights.push({ d: back(d), id: String(id), g: Math.round(g * 10) / 10, note: "" });
+    }
+  }
+  return { turtles, weights, clutches, lots, money, tasks, hatch, settings: { species: DEF.species.join(","), zones: "บ้าน,คอกเสือดาว,คอกซูคาต้า,คอกสตาร์,คอกอัลดาบร้า", dropPct: 5, staleKid: 10, staleBig: 21, eggGap: 21, eggAhead: 14 }, rev: 1, sheetUrl: "" };
+}
+
+/* ================= เริ่มแอป ================= */
+(function boot() {
+  const m = location.hash.match(/[#&]k=([^&]+)/);
+  if (m) { lsSet(LS.pin, decodeURIComponent(m[1])); history.replaceState(null, "", location.pathname + location.search); }
+  if (typeof google !== "undefined" && google.script && google.script.run) S.mode = "gas";
+  else if (API_URL) S.mode = "api";
+  S.pin = lsGet(LS.pin, "");
+  if (S.mode === "demo") DEMO = demoData();
+  else {
+    const dr = lsGet(LS.draft, null);
+    if (dr && dr.date) { S.draft = dr; S.wDate = dr.date; }
+    if ("serviceWorker" in navigator && location.protocol === "https:") navigator.serviceWorker.register("sw.js").catch(() => null);
+  }
+  render();
+  load();
+})();
+</script>
+</body>
+</html>
